@@ -19,7 +19,40 @@
 
     <a href="/login">Kirjaudu sisään</a>
 
+  
+
   {% endif %}
+
+  <h1>Pörssi</h1>
+
+  <hr />
+  {% for company in companies %}
+  <p>
+     {{ company.name }}. Hinta  {{ company.last_price }} €
+  </p>
+  <p>
+     Listaaja: {{ company.owner }}. Osakkeita: {{ company.stock_amount }}
+  </p>
+  <hr />
+  {% endfor %}
+
+  {% if session.username %}
+
+  <h3>Listaa uusi yritys</h3>
+
+  <form action="/new_listing" method="post">
+    <p>
+      Yrityksen nimi:<br />
+      <input type="text" name="company_name" />
+    </p>
+    <p>
+      Osakkeiden määrä:<br />
+      <input type="number" name="stock_amount" />
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
+  {% endif %}
+
 
 </body>
 

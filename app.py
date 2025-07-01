@@ -4,13 +4,26 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import config
 import db
+import exchange
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    companies = exchange.get_companies()
+    return render_template("index.html", companies = companies)
+
+@app.route("/new_listing", methods = ["POST"])
+def new_listing():
+
+    company_name = request.form["company_name"]
+    stock_amount = request.form["stock_amount"]
+    lister_name = session["username"]
+
+    exchange.new_listing(company_name, stock_amount, lister_name)
+    return redirect("/")
+
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
