@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash
@@ -5,6 +6,7 @@ from werkzeug.security import check_password_hash
 import config
 import db
 import exchange
+import user
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -24,6 +26,15 @@ def new_listing():
     exchange.new_listing(company_name, stock_amount, lister_name)
     return redirect("/")
 
+@app.route("/users")
+def show_users():
+    users = user.get_users()
+    return render_template("users.html", users=users)
+
+@app.route("/users/<string:username>")
+def show_user(username):
+    portfolio = user.get_portfolio(username)
+    return render_template("user.html", portfolio = portfolio, username = username)
 
 @app.route("/register", methods=["POST", "GET"])
 def register():

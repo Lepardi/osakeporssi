@@ -2,18 +2,19 @@
 <html>
 
 <head>
-  <title>Portfoliot</title>
+  <title>Käyttäjät</title>
 </head>
 
 <body>
   <p>
     <a href="/">Palaa etusivulle</a>
   </p>
-   <h2>Käyttäjät</h2>
+  <h2>Käyttäjät</h2>
+  <p>Klikkaa käyttäjän nimeä tarkastellaksesi tämän portfoliota</p>
   <hr />
   {% for user in users %}
   <p>
-     {{ user.username }}
+    <a href="/users/{{ user.username }}"> {{ user.username }} </a>
 
   <hr />
   {% endfor %}
