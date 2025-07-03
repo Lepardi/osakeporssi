@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Portfoliot</title>
+</head>
+
+<body>
+  <p>
+    <a href="/">Palaa etusivulle</a>
+  </p>
+   <h2>Käyttäjät</h2>
+  <hr />
+  {% for user in users %}
+  <p>
+     {{ user.username }}
+
+  <hr />
+  {% endfor %}
+</body>
