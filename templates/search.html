@@ -1,0 +1,42 @@
+  
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Haku</title>
+</head>
+<body>  
+    <p>
+        <a href="/">Palaa etusivulle</a>
+    </p>
+    <h2>Haku</h2>
+    <form action="/search" method="get">
+        <p>
+        Hakusana:
+        {% if query %}
+        <input type="text" name="query" value="{{ query }}" />
+        {% else %}
+        <input type="text" name="query" />
+        {% endif %}
+        </p>
+        <input type="submit" value="Hae" />
+    </form>
+
+    {% if query %}
+    <hr />
+    <h3>Tulokset</h3>
+    
+    <hr />
+    {% for company in results %}
+    <p>
+        {{ company.name }}. Hinta  {{ company.last_price }} €
+    </p>
+    <p>
+        Listaaja: {{ company.owner }}. Osakkeita: {{ company.stock_amount }}
+    </p>
+    <hr />
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+</body>

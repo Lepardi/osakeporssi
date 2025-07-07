@@ -22,3 +22,8 @@ def add_to_portfolio(username, company_name, stock_amount):
             VALUES (?, ?, ?)"""
     db.execute(sql, [user_id[0]["id"], company_id[0]["id"], stock_amount])
 
+def search(query):
+    sql = """SELECT name, stock_amount, last_price, owner
+             FROM companies 
+             WHERE name LIKE ?"""
+    return db.query(sql, ["%" + query + "%"])

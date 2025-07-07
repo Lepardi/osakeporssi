@@ -36,6 +36,13 @@ def show_user(username):
     portfolio = user.get_portfolio(username)
     return render_template("user.html", portfolio = portfolio, username = username)
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = exchange.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
+
+
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "GET":
