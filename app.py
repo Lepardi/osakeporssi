@@ -21,9 +21,10 @@ def new_listing():
 
     company_name = request.form["company_name"]
     stock_amount = request.form["stock_amount"]
+    industry = request.form["industry"]
     lister_name = session["username"]
 
-    exchange.new_listing(company_name, stock_amount, lister_name)
+    exchange.new_listing(company_name, stock_amount, lister_name, industry)
     return redirect("/")
 
 @app.route("/users")

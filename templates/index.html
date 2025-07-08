@@ -43,7 +43,7 @@
      {{ company.name }}. Hinta  {{ company.last_price }} €
   </p>
   <p>
-     Listaaja: {{ company.owner }}. Osakkeita: {{ company.stock_amount }}
+    Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
   </p>
   <hr />
   {% endfor %}
@@ -60,6 +60,15 @@
     <p>
       Osakkeiden määrä:<br />
       <input type="number" name="stock_amount" />
+    </p>
+    <p>
+      Yrityksen toimiala: <br />
+      <select type="text" name="industry">
+        <option value="Kulutustavarat">Kulutustavara</option>
+        <option value="Elintarvikkeet">Elintarvikkeet</option>
+        <option value="Teollisuus">Teollisuus</option>
+        <option value="Elektroniikka">Elektroniikka</option>
+      </select>
     </p>
     <input type="submit" value="Lähetä" />
   </form>

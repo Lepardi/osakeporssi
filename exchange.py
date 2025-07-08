@@ -1,14 +1,14 @@
 import db
 
 def get_companies():
-    sql = """SELECT name, stock_amount, last_price, owner
+    sql = """SELECT name, stock_amount, last_price, owner, industry
             FROM companies """
     return db.query(sql)
 
-def new_listing(company_name, stock_amount, lister_name):
-    sql = """INSERT INTO companies (name, stock_amount, last_price, owner) 
-            VALUES (?, ?, ?, ?)"""
-    db.execute(sql, [company_name, stock_amount, 0, lister_name])
+def new_listing(company_name, stock_amount, lister_name, industry):
+    sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry) 
+            VALUES (?, ?, ?, ?, ?)"""
+    db.execute(sql, [company_name, stock_amount, 0, lister_name, industry])
     add_to_portfolio(lister_name, company_name, stock_amount)
 
 def add_to_portfolio(username, company_name, stock_amount):
@@ -23,7 +23,7 @@ def add_to_portfolio(username, company_name, stock_amount):
     db.execute(sql, [user_id[0]["id"], company_id[0]["id"], stock_amount])
 
 def search(query):
-    sql = """SELECT name, stock_amount, last_price, owner
+    sql = """SELECT name, stock_amount, last_price, owner, industry
              FROM companies 
-             WHERE name LIKE ?"""
+             WHERE name OR industry LIKE ?"""
     return db.query(sql, ["%" + query + "%"])
