@@ -45,6 +45,12 @@
   <p>
     Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
   </p>
+  {% if company.owner == session.username %}
+  <p>
+    <a href="/edit/{{ company.id }}">Muokkaa</a> |
+
+  </p>
+  {% endif %}
   <hr />
   {% endfor %}
 

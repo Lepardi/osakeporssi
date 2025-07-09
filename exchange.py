@@ -1,9 +1,14 @@
 import db
 
 def get_companies():
-    sql = """SELECT name, stock_amount, last_price, owner, industry
+    sql = """SELECT id, name, stock_amount, last_price, owner, industry
             FROM companies """
     return db.query(sql)
+
+def get_company(company_id):
+    sql = """SELECT id, name, stock_amount, last_price, owner, industry
+            FROM companies WHERE id = ?"""
+    return db.query(sql, [company_id])
 
 def new_listing(company_name, stock_amount, lister_name, industry):
     sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry) 
@@ -27,3 +32,8 @@ def search(query):
              FROM companies 
              WHERE name OR industry LIKE ?"""
     return db.query(sql, ["%" + query + "%"])
+
+
+def update_company(company_id, company_name, industry):
+    sql = "UPDATE companies SET name = ?, industry = ? WHERE id = ?"
+    db.execute(sql, [company_name, industry, company_id])

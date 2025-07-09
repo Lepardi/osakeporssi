@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Muokkaa</title>
+</head>
+
+<body>
+    <h2>Yrityksen tietojen muokkaus</h2>
+    <form action="/edit/{{ company.id }}" method="post">
+        <p>
+            Yrityksen nimi:<br />
+            <textarea name="company_name" rows="1" cols="20">{{ company.name }}</textarea>
+        </p>
+        <p>
+            Yrityksen toimiala: <br />
+            <select type="text" name="industry">
+            <option value="Kulutustavarat">Kulutustavara</option>
+            <option value="Elintarvikkeet">Elintarvikkeet</option>
+            <option value="Teollisuus">Teollisuus</option>
+            <option value="Elektroniikka">Elektroniikka</option>
+            </select>
+        </p>
+        <input type="submit" value="Lähetä" />
+    </form>
+
+</body>

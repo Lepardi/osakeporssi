@@ -43,6 +43,22 @@ def search():
     results = exchange.search(query) if query else []
     return render_template("search.html", query=query, results=results)
 
+@app.route("/edit/<int:company_id>", methods=["GET", "POST"])
+def edit_message(company_id):
+    company = exchange.get_company(company_id)
+    #print(company)
+    if company[0]["owner"] != session["username"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("edit.html", company=company[0])
+
+    if request.method == "POST":
+        name = request.form["company_name"]
+        industry = request.form["industry"]
+        exchange.update_company(company[0]["id"], name, industry)
+        return redirect("/")
+
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
