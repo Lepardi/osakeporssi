@@ -59,6 +59,26 @@ def edit_message(company_id):
         exchange.update_company(company[0]["id"], name, industry)
         return redirect("/")
 
+@app.route("/remove/<int:company_id>", methods=["GET", "POST"])
+def remove_company(company_id):
+    company = exchange.get_company(company_id)
+    if company[0]["owner"] != session["username"]:
+        abort(403)
+
+    if request.method == "GET":
+        owners = exchange.get_company_owners(company_id)
+        if session["username"] == owners[0]["username"] and len(owners) == 1:
+            return render_template("remove.html", company=company[0])
+            
+        else:
+            return "Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!"
+        
+    if request.method == "POST":
+        if "continue" in request.form:
+            exchange.remove_company(company[0]["id"])
+            return redirect("/")
+        return redirect("/")
+
 
 @app.route("/register", methods=["POST", "GET"])
 def register():

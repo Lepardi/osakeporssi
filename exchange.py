@@ -10,6 +10,10 @@ def get_company(company_id):
             FROM companies WHERE id = ?"""
     return db.query(sql, [company_id])
 
+def get_company_owners(company_id):
+    sql = """SELECT username FROM portfolios p, users u WHERE company_id = ? AND p.user_id = u.id"""
+    return db.query(sql, [company_id])
+
 def new_listing(company_name, stock_amount, lister_name, industry):
     sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry) 
             VALUES (?, ?, ?, ?, ?)"""
@@ -33,7 +37,15 @@ def search(query):
              WHERE name OR industry LIKE ?"""
     return db.query(sql, ["%" + query + "%"])
 
-
 def update_company(company_id, company_name, industry):
     sql = "UPDATE companies SET name = ?, industry = ? WHERE id = ?"
     db.execute(sql, [company_name, industry, company_id])
+
+def remove_company(company_id):
+    remove_company_from_portfolio(company_id)
+    sql = "DELETE FROM companies WHERE id = ?"
+    db.execute(sql, [company_id])
+
+def remove_company_from_portfolio(company_id):
+    sql = "DELETE FROM portfolios WHERE company_id = ?"
+    db.execute(sql, [company_id])

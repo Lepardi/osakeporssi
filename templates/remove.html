@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Poista yritys</title>
+</head>
+
+<body>
+  <p>
+    Haluatko varmasti poistaa yrityksen listauksen?
+  </p>
+  <form action="/remove/{{ company.id }}" method="post">
+    <p>
+      <input type="submit" name="continue" value="Jatka" />
+      <input type="submit" name="cancel" value="Peruuta" />
+    </p>
+  </form>
+</body>

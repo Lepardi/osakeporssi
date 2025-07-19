@@ -48,7 +48,7 @@
   {% if company.owner == session.username %}
   <p>
     <a href="/edit/{{ company.id }}">Muokkaa</a> |
-
+    <a href="/remove/{{ company.id }}">Poista</a>
   </p>
   {% endif %}
   <hr />
