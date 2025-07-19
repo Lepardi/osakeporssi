@@ -7,18 +7,22 @@
 
 <body>
   <p>
-    <a href="/">Palaa etusivulle</a>
-  </p>
-  <p>
-    <a href="/users">Käyttäjät</a>
+    <a href="/">Palaa etusivulle</a> | <a href="/users">Käyttäjät</a>
   </p>
 
-  <h2> Käyttäjän {{ username }} portfolio</h2>
+  <h2> Käyttäjän {{ username }} portfolio:</h2>
   <hr />
   {% for company in portfolio %}
   <p>
      {{ company.name }} | Osakkeita {{ company.amount }} kappaletta
+  </p>
+  <hr />
+  {% endfor %}
 
+  <h2> {{ username }} on listannut seuraavat yritykset:</h2>
+  <hr />
+  {% for company in companies %}
+     {{ company.name }} 
   <hr />
   {% endfor %}
 </body>

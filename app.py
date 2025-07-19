@@ -35,7 +35,9 @@ def show_users():
 @app.route("/users/<string:username>")
 def show_user(username):
     portfolio = user.get_portfolio(username)
-    return render_template("user.html", portfolio = portfolio, username = username)
+    companies = user.get_listed_companies(username)
+    return render_template("user.html", portfolio = portfolio,
+                            username = username, companies = companies)
 
 @app.route("/search")
 def search():
