@@ -14,6 +14,14 @@ def get_company_owners(company_id):
     sql = """SELECT username FROM portfolios p, users u WHERE company_id = ? AND p.user_id = u.id"""
     return db.query(sql, [company_id])
 
+def add_buy_order(buyer_id, company_id, amount, price):
+    sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) VALUES (?, ?, ?, ?)"""
+    db.execute(sql, [buyer_id, company_id, amount, price])
+
+def add_sell_order(seller_id, company_id, amount, price):
+    sql = """INSERT INTO sell_orders (seller_id, company_id, amount, price) VALUES (?, ?, ?, ?)"""
+    db.execute(sql, [seller_id, company_id, amount, price])
+
 def new_listing(company_name, stock_amount, lister_name, industry):
     sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry) 
             VALUES (?, ?, ?, ?, ?)"""
@@ -34,8 +42,8 @@ def add_to_portfolio(username, company_name, stock_amount):
 def search(query):
     sql = """SELECT name, stock_amount, last_price, owner, industry
              FROM companies 
-             WHERE name OR industry LIKE ?"""
-    return db.query(sql, ["%" + query + "%"])
+             WHERE name LIKE ? OR industry LIKE ?"""
+    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
 
 def update_company(company_id, company_name, industry):
     sql = "UPDATE companies SET name = ?, industry = ? WHERE id = ?"

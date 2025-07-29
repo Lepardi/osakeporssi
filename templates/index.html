@@ -8,19 +8,15 @@
 <body>
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  <p>
+    Olet kirjautunut nimellä {{ session.username }} &nbsp &nbsp
     <a href="/logout">Kirjaudu ulos</a>
   </p>
-
   {% else %}
     <a href="/register">Luo tunnus</a> |
-
     <a href="/login">Kirjaudu sisään</a>
   {% endif %}
 
-  <p><a href="/users">Käyttäjät</a></p>
+  <p><a href="/users">Käyttäjät</a> &nbsp | &nbsp <a href="/orders">Osto- ja myyntitarjoukset</a></p>
 
   <h1>Pörssi</h1>
 
@@ -40,11 +36,27 @@
   <hr />
   {% for company in companies %}
   <p>
-     {{ company.name }}. Hinta  {{ company.last_price }} €
+    {{ company.name }}. Hinta  {{ company.last_price }} €
   </p>
   <p>
-    Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
+    Toimiala: {{ company.industry }} &nbsp | &nbsp Listaaja: {{ company.owner }} &nbsp | &nbsp Osakkeita: {{ company.stock_amount }}
   </p>
+  {% if session.username %}
+  <p>
+  <form action="/new_buy_order/{{ company.id }}" method="post">
+    Määrä: <input type="number" name="stock_buy_amount" size="5" min="1" required/> &nbsp &nbsp
+    Hinta: <input type="number" name="stock_buy_price" size="5" min="1" required/> 
+    <input type="submit" value="Osta" />
+  </form> 
+  </p>
+  <p>
+  <form action="/new_sell_order/{{ company.id }}" method="post">
+    Määrä: <input type="number" name="stock_sell_amount" size="5" min="1" required/> &nbsp &nbsp
+    Hinta: <input type="number" name="stock_sell_price" size="5" min="1" required/> 
+    <input type="submit" value="Myy" />
+  </form> 
+  </p>
+  {% endif %}
   {% if company.owner == session.username %}
   <p>
     <a href="/edit/{{ company.id }}">Muokkaa</a> |
@@ -61,11 +73,11 @@
   <form action="/new_listing" method="post">
     <p>
       Yrityksen nimi:<br />
-      <input type="text" name="company_name" />
+      <input type="text" name="company_name" required/>
     </p>
     <p>
       Osakkeiden määrä:<br />
-      <input type="number" name="stock_amount" />
+      <input type="number" name="stock_amount" min="1"/>
     </p>
     <p>
       Yrityksen toimiala: <br />

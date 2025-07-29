@@ -27,6 +27,34 @@ def new_listing():
     exchange.new_listing(company_name, stock_amount, lister_name, industry)
     return redirect("/")
 
+@app.route("/new_buy_order/<int:company_id>", methods = ["POST"])
+def new_buy_order(company_id):
+
+    stock_buy_amount = request.form["stock_buy_amount"]
+    buy_price = request.form["stock_buy_price"]
+    user_id = user.get_user_id(session["username"])[0]["id"]
+
+    exchange. add_buy_order(user_id, company_id, stock_buy_amount, buy_price)
+    return redirect("/")
+
+@app.route("/new_sell_order/<int:company_id>", methods = ["POST"])
+def new_sell_order(company_id):
+
+    stock_sell_amount = request.form["stock_sell_amount"]
+    sell_price = request.form["stock_sell_price"]
+    user_id = user.get_user_id(session["username"])[0]["id"]
+
+    if len(user.get_owned_stock_amount(session["username"], company_id)) == 0:
+        amount_of_stock_owned = 0
+    else:
+        amount_of_stock_owned = user.get_owned_stock_amount(session["username"], company_id)[0]["amount"]
+
+    if int(amount_of_stock_owned) < int(stock_sell_amount):
+        return "Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain " + str(amount_of_stock_owned) +" osaketta."
+
+    exchange. add_buy_order(user_id, company_id, stock_sell_amount, sell_price)
+    return redirect("/")
+
 @app.route("/users")
 def show_users():
     users = user.get_users()
@@ -46,9 +74,9 @@ def search():
     return render_template("search.html", query=query, results=results)
 
 @app.route("/edit/<int:company_id>", methods=["GET", "POST"])
-def edit_message(company_id):
+def edit_company(company_id):
     company = exchange.get_company(company_id)
-    #print(company)
+
     if company[0]["owner"] != session["username"]:
         abort(403)
 
