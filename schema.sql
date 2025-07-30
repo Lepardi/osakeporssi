@@ -19,3 +19,17 @@ CREATE TABLE portfolios (
     companies, 
     amount INTEGER
 );
+
+CREATE TABLE sell_orders (
+    id INTEGER PRIMARY KEY, 
+    seller_id INTEGER REFERENCES users, 
+    company_id INTEGER REFERENCES companies, 
+    amount INTEGER, 
+    price INTEGER);
+
+CREATE TABLE buy_orders (
+    id INTEGER PRIMARY KEY, 
+    buyer_id INTEGER REFERENCES users, 
+    company_id INTEGER REFERENCES companies, 
+    amount INTEGER, 
+    price INTEGER);

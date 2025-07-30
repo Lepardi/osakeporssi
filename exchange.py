@@ -11,15 +11,30 @@ def get_company(company_id):
     return db.query(sql, [company_id])
 
 def get_company_owners(company_id):
-    sql = """SELECT username FROM portfolios p, users u WHERE company_id = ? AND p.user_id = u.id"""
+    sql = """SELECT username FROM portfolios p, users u 
+            WHERE company_id = ? AND p.user_id = u.id"""
     return db.query(sql, [company_id])
 
+def get_sell_orders():
+    sql = """SELECT seller_id, username, company_id, name, amount, price 
+            FROM users u, companies c, sell_orders s
+            WHERE s.seller_id = u.id AND s.company_id = c.id"""
+    return db.query(sql)
+
+def get_buy_orders():
+    sql = """SELECT buyer_id, username, company_id, name, amount, price 
+            FROM users u, companies c, buy_orders b
+            WHERE b.buyer_id = u.id AND b.company_id = c.id"""
+    return db.query(sql)
+
 def add_buy_order(buyer_id, company_id, amount, price):
-    sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) VALUES (?, ?, ?, ?)"""
+    sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) 
+            VALUES (?, ?, ?, ?)"""
     db.execute(sql, [buyer_id, company_id, amount, price])
 
 def add_sell_order(seller_id, company_id, amount, price):
-    sql = """INSERT INTO sell_orders (seller_id, company_id, amount, price) VALUES (?, ?, ?, ?)"""
+    sql = """INSERT INTO sell_orders (seller_id, company_id, amount, price) 
+            VALUES (?, ?, ?, ?)"""
     db.execute(sql, [seller_id, company_id, amount, price])
 
 def new_listing(company_name, stock_amount, lister_name, industry):

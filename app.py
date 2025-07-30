@@ -35,7 +35,7 @@ def new_buy_order(company_id):
     user_id = user.get_user_id(session["username"])[0]["id"]
 
     exchange. add_buy_order(user_id, company_id, stock_buy_amount, buy_price)
-    return redirect("/")
+    return redirect("/orders")
 
 @app.route("/new_sell_order/<int:company_id>", methods = ["POST"])
 def new_sell_order(company_id):
@@ -52,8 +52,14 @@ def new_sell_order(company_id):
     if int(amount_of_stock_owned) < int(stock_sell_amount):
         return "Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain " + str(amount_of_stock_owned) +" osaketta."
 
-    exchange. add_buy_order(user_id, company_id, stock_sell_amount, sell_price)
-    return redirect("/")
+    exchange. add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
+    return redirect("/orders")
+
+@app.route("/orders")
+def show_orders():
+    buy_orders = exchange.get_buy_orders()
+    sell_orders = exchange.get_sell_orders()
+    return render_template("orders.html", buy_orders=buy_orders, sell_orders=sell_orders)
 
 @app.route("/users")
 def show_users():
@@ -64,8 +70,8 @@ def show_users():
 def show_user(username):
     portfolio = user.get_portfolio(username)
     companies = user.get_listed_companies(username)
-    return render_template("user.html", portfolio = portfolio,
-                            username = username, companies = companies)
+    return render_template("user.html", portfolio=portfolio,
+                            username=username, companies=companies)
 
 @app.route("/search")
 def search():
