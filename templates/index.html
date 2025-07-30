@@ -35,9 +35,10 @@
 
   <hr />
   {% for company in companies %}
-  <p>
-    {{ company.name }}. Hinta  {{ company.last_price }} €
-  </p>
+  <p> <b>{{ company.name }}</b> </p>
+  <p>  Korkein ostotarjous:  {{ company.max }} € </p>
+  <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
+  
   <p>
     Toimiala: {{ company.industry }} &nbsp | &nbsp Listaaja: {{ company.owner }} &nbsp | &nbsp Osakkeita: {{ company.stock_amount }}
   </p>

@@ -1,8 +1,11 @@
 import db
 
 def get_companies():
-    sql = """SELECT id, name, stock_amount, last_price, owner, industry
-            FROM companies """
+    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
+            IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
+            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+            LEFT JOIN sell_orders s ON c.id = s.company_id
+            GROUP BY c.id"""
     return db.query(sql)
 
 def get_company(company_id):
@@ -26,6 +29,16 @@ def get_buy_orders():
             FROM users u, companies c, buy_orders b
             WHERE b.buyer_id = u.id AND b.company_id = c.id"""
     return db.query(sql)
+
+def get_user_sell_orders_amount(username):
+    sql = """SELECT COUNT(*) FROM sell_orders b, users u
+             WHERE u.username = ? AND u.id = b.seller_id"""
+    return db.query(sql, [username])[0][0]
+
+def get_user_buy_orders_amount(username):
+    sql = """SELECT COUNT(*) FROM buy_orders b, users u
+             WHERE u.username = ? AND u.id = b.buyer_id"""
+    return db.query(sql, [username])[0][0]
 
 def add_buy_order(buyer_id, company_id, amount, price):
     sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) 
@@ -54,10 +67,19 @@ def add_to_portfolio(username, company_name, stock_amount):
             VALUES (?, ?, ?)"""
     db.execute(sql, [user_id[0]["id"], company_id[0]["id"], stock_amount])
 
+#def search(query):
+#    sql = """SELECT name, stock_amount, last_price, owner, industry
+#             FROM companies 
+#             WHERE name LIKE ? OR industry LIKE ?"""
+#    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
+
 def search(query):
-    sql = """SELECT name, stock_amount, last_price, owner, industry
-             FROM companies 
-             WHERE name LIKE ? OR industry LIKE ?"""
+    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
+            IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
+            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+            LEFT JOIN sell_orders s ON c.id = s.company_id
+            WHERE name LIKE ? OR industry LIKE ?
+            GROUP BY c.id"""
     return db.query(sql, ["%" + query + "%", "%" + query + "%"])
 
 def update_company(company_id, company_name, industry):

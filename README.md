@@ -1,16 +1,16 @@
 # Osakepörssi
 
 ## Sovelluksen toiminnot
-  * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.  --Toteutettu
-  * Käyttäjä pystyy listaamaan uusia yrityksiä pörssiin.  --Toteutettu
-  * Käyttäjä pystyy valitsemaan yritystä listatessa tälle yhden luokittelun.  --Toteutettu
-  * Käyttäjä pystyy muokkaamaan ja poistamaan listaamiansa yrityksiä.  --Toteutettu
-  * Käyttäjä näkee sovellukseen listatut yritykset.  --Toteutettu
-  * Käyttäjä pystyy hakemaan yrityksiä hakusanalla.  --Toteutettu
-  * Käyttäjä pystyy tekemään yrityksen osakkeista myynti- ja ostotarjouksia. --Ei toteutettu
-  * Sovelluksessa on sivu jossa näytetään olemassa olevat myynti- ja ostotarjoukset.  --Ei toteutettu
-  * Sovelluksessa on käyttäjäsivut, joissa näkee käyttäjän listaamat yritykset.   --Toteutettu
-  * Käyttäjäsivulla näytetään kuinka paljon käyttäjällä on voimassa olevia myynti- tai ostotarjouksia. --Ei toteutettu
+  * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
+  * Käyttäjä pystyy listaamaan uusia yrityksiä pörssiin.
+  * Käyttäjä pystyy valitsemaan yritystä listatessa tälle yhden luokittelun.
+  * Käyttäjä pystyy muokkaamaan ja poistamaan listaamiansa yrityksiä.
+  * Käyttäjä näkee sovellukseen listatut yritykset.
+  * Käyttäjä pystyy hakemaan yrityksiä hakusanalla.
+  * Käyttäjä pystyy tekemään yrityksen osakkeista myynti- ja ostotarjouksia.
+  * Sovelluksessa on sivu jossa näytetään olemassa olevat myynti- ja ostotarjoukset.
+  * Sovelluksessa on käyttäjäsivut, joissa näkee käyttäjän listaamat yritykset.
+  * Käyttäjäsivulla näytetään kuinka paljon käyttäjällä on voimassa olevia myynti- tai ostotarjouksia.
 
 ## Sovelluksen asennus
 

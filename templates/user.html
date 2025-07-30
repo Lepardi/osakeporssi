@@ -10,7 +10,11 @@
     <a href="/">Palaa etusivulle</a> | <a href="/users">Käyttäjät</a>
   </p>
 
-  <h2> Käyttäjän {{ username }} portfolio:</h2>
+  <p> <b>{{ username }}</b> on tehnyt: <p/>
+  <p>{{ buy_order_amount }} ostotarjousta.</p>
+  <p>{{ sell_order_amount }} myyntitarjousta.</p>
+
+  <h3> Käyttäjän {{ username }} portfolio:</h3>
   <hr />
   {% for company in portfolio %}
   <p>
@@ -19,7 +23,7 @@
   <hr />
   {% endfor %}
 
-  <h2> {{ username }} on listannut seuraavat yritykset:</h2>
+  <h3> {{ username }} on listannut seuraavat yritykset:</h3>
   <hr />
   {% for company in companies %}
      {{ company.name }} 

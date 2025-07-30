@@ -24,13 +24,13 @@
 
     {% if query %}
     <hr />
-    <h3>Tulokset</h3>
+    <h3>Tulokset:</h3>
     
     <hr />
     {% for company in results %}
-    <p>
-        {{ company.name }}. Hinta  {{ company.last_price }} €
-    </p>
+    <p> <b>{{ company.name }}</b> </p>
+    <p>  Korkein ostotarjous:  {{ company.max }} € </p>
+    <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
     <p>
         Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
     </p>
