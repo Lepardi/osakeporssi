@@ -70,8 +70,8 @@ def show_users():
 def show_user(username):
     portfolio = user.get_portfolio(username)
     companies = user.get_listed_companies(username)
-    sell_order_amount = exchange.get_user_sell_orders_amount(username)
-    buy_order_amount = exchange.get_user_buy_orders_amount(username)
+    sell_order_amount = user.get_user_sell_orders_amount(username)
+    buy_order_amount = user.get_user_buy_orders_amount(username)
     print(buy_order_amount)
     return render_template("user.html", portfolio=portfolio,
                             username=username, companies=companies,

@@ -30,16 +30,6 @@ def get_buy_orders():
             WHERE b.buyer_id = u.id AND b.company_id = c.id"""
     return db.query(sql)
 
-def get_user_sell_orders_amount(username):
-    sql = """SELECT COUNT(*) FROM sell_orders b, users u
-             WHERE u.username = ? AND u.id = b.seller_id"""
-    return db.query(sql, [username])[0][0]
-
-def get_user_buy_orders_amount(username):
-    sql = """SELECT COUNT(*) FROM buy_orders b, users u
-             WHERE u.username = ? AND u.id = b.buyer_id"""
-    return db.query(sql, [username])[0][0]
-
 def add_buy_order(buyer_id, company_id, amount, price):
     sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) 
             VALUES (?, ?, ?, ?)"""
@@ -88,9 +78,19 @@ def update_company(company_id, company_name, industry):
 
 def remove_company(company_id):
     remove_company_from_portfolio(company_id)
+    remove_company_from_sell_orders(company_id)
+    remove_company_from_buy_orders(company_id)
     sql = "DELETE FROM companies WHERE id = ?"
     db.execute(sql, [company_id])
 
 def remove_company_from_portfolio(company_id):
     sql = "DELETE FROM portfolios WHERE company_id = ?"
+    db.execute(sql, [company_id])
+
+def remove_company_from_sell_orders(company_id):
+    sql = "DELETE FROM sell_orders WHERE company_id = ?"
+    db.execute(sql, [company_id])
+
+def remove_company_from_buy_orders(company_id):
+    sql = "DELETE FROM buy_orders WHERE company_id = ?"
     db.execute(sql, [company_id])
