@@ -1,7 +1,7 @@
 import sqlite3
 import secrets
 from flask import Flask
-from flask import abort, redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session, flash
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import config
@@ -24,9 +24,12 @@ def new_listing():
     stock_amount = request.form["stock_amount"]
     industry = request.form["industry"]
     lister_name = session["username"]
-
-    exchange.new_listing(company_name, stock_amount, lister_name, industry)
-    return redirect("/")
+    try:
+        exchange.new_listing(company_name, stock_amount, lister_name, industry)
+        return redirect("/")
+    except sqlite3.IntegrityError:
+        flash("Tämän niminen yritys on jo listattu!")
+        return redirect("/")
 
 @app.route("/new_buy_order/<int:company_id>", methods = ["POST"])
 def new_buy_order(company_id):
@@ -51,7 +54,9 @@ def new_sell_order(company_id):
         amount_of_stock_owned = user.get_owned_stock_amount(session["username"], company_id)[0]["amount"]
 
     if int(amount_of_stock_owned) < int(stock_sell_amount):
-        return "Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain " + str(amount_of_stock_owned) +" osaketta."
+        flash("Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain " 
+                + str(amount_of_stock_owned) +" osaketta.")
+        return redirect("/")
 
     exchange. add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
     return redirect("/orders")
@@ -99,8 +104,12 @@ def edit_company(company_id):
         check_csrf()
         name = request.form["company_name"]
         industry = request.form["industry"]
-        exchange.update_company(company[0]["id"], name, industry)
-        return redirect("/")
+        try:
+            exchange.update_company(company[0]["id"], name, industry)
+            return redirect("/")
+        except sqlite3.IntegrityError:
+            flash("Tämän niminen yritys on jo listattu!")
+            return redirect("/")
 
 @app.route("/remove/<int:company_id>", methods=["GET", "POST"])
 def remove_company(company_id):
@@ -114,7 +123,8 @@ def remove_company(company_id):
             return render_template("remove.html", company=company[0])
             
         else:
-            return "Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!"
+            flash("Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!")
+            return redirect("/")
         
     if request.method == "POST":
         check_csrf()
@@ -136,16 +146,20 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: salasanat eivät ole samat")
+        return redirect("/register")
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        flash("VIRHE: tunnus on jo varattu")
+        return redirect("/register")
 
-    return "Tunnus luotu"
+    flash("Tunnus luotu. Palaa etusivulle missä voit kirjautua sisään.")
+    return redirect("/register")
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -160,7 +174,8 @@ def login():
         sql = "SELECT password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])
         if len(result) == 0:
-            return "VIRHE: väärä tunnus tai salasana"
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/login")
         password_hash = result[0][0]
 
         if check_password_hash(password_hash, password):
@@ -168,7 +183,8 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/login")
 
 @app.route("/logout")
 def logout():

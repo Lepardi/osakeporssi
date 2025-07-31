@@ -33,6 +33,14 @@
       <input type="submit" value="Hae" />
   </form>
 
+  {% for message in get_flashed_messages() %}
+  <p>
+  <div class="info">
+    <b style='color:red;'> {{ message }} </b>
+  </div>
+  </p>
+  {% endfor %}
+
   <hr />
   {% for company in companies %}
   <p> <b>{{ company.name }}</b> </p>
