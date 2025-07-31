@@ -6,24 +6,25 @@
 </head>
 
 <body>
-    <h2>Yrityksen tietojen muokkaus</h2>
-    <form action="/edit/{{ company.id }}" method="post">
-        <p>
-            Yrityksen nimi:<br />
-            <textarea name="company_name" rows="1" cols="20">{{ company.name }}</textarea>
-        </p>
-        <p>
-            Yrityksen toimiala: <br />
-            <select type="text" name="industry">
-            <option value="Kulutustavarat">Kulutustavara</option>
-            <option value="Elintarvikkeet">Elintarvikkeet</option>
-            <option value="Teollisuus">Teollisuus</option>
-            <option value="Elektroniikka">Elektroniikka</option>
-            </select>
-        </p>
-        <input type="submit" value="Lähetä" />
-    </form>
-    <p>
-        <a href="/">Palaa etusivulle</a>
-    </p>
+<h2>Yrityksen tietojen muokkaus</h2>
+<form action="/edit/{{ company.id }}" method="post">
+  <p>
+      <label for="company_name">Yrityksen nimi</label>: <br />
+      <textarea name="company_name" rows="1" cols="20">{{ company.name }}</textarea>
+  </p>
+  <p>
+      <label for="industry">Yrityksen toimiala</label>: <br />
+      <select type="text" name="industry">
+      <option value="Kulutustavarat">Kulutustavara</option>
+      <option value="Elintarvikkeet">Elintarvikkeet</option>
+      <option value="Teollisuus">Teollisuus</option>
+      <option value="Elektroniikka">Elektroniikka</option>
+      </select>
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Lähetä" />
+</form>
+<p>
+  <a href="/">Palaa etusivulle</a>
+</p>
 </body>

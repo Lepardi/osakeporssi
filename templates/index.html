@@ -23,7 +23,7 @@
   <h3>Haku</h3>
   <form action="/search" method="get">
       <p>
-      Hakusana:
+      <label for="query">Hakusana</label>: <br />
       {% if query %}
       <input type="text" name="query" value="{{ query }}" />
       {% else %}
@@ -45,15 +45,21 @@
   {% if session.username %}
   <p>
   <form action="/new_buy_order/{{ company.id }}" method="post">
-    Määrä: <input type="number" name="stock_buy_amount" size="5" min="1" required/> &nbsp &nbsp
-    Hinta: <input type="number" name="stock_buy_price" size="5" min="1" required/> 
+    <label for="stock_buy_amount">Määrä</label>:
+    <input type="number" name="stock_buy_amount" size="5" min="1" required/> &nbsp &nbsp
+    <label for="stock_buy_price">Hinta</label>:
+    <input type="number" name="stock_buy_price" size="5" min="1" required/> 
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Osta" />
   </form> 
   </p>
   <p>
   <form action="/new_sell_order/{{ company.id }}" method="post">
-    Määrä: <input type="number" name="stock_sell_amount" size="5" min="1" required/> &nbsp &nbsp
-    Hinta: <input type="number" name="stock_sell_price" size="5" min="1" required/> 
+    <label for="stock_sell_amount">Määrä</label>:
+    <input type="number" name="stock_sell_amount" size="5" min="1" required/> &nbsp &nbsp
+    <label for="stock_sell_price">Hinta</label>:
+    <input type="number" name="stock_sell_price" size="5" min="1" required/> 
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Myy" />
   </form> 
   </p>
@@ -73,15 +79,15 @@
 
   <form action="/new_listing" method="post">
     <p>
-      Yrityksen nimi:<br />
+      <label for="company_name">Yrityksen nimi</label>: <br />
       <input type="text" name="company_name" required/>
     </p>
     <p>
-      Osakkeiden määrä:<br />
+      <label for="stock_amount">Osakkeiden määrä</label>: <br />
       <input type="number" name="stock_amount" min="1"/>
     </p>
     <p>
-      Yrityksen toimiala: <br />
+      <label for="industry">Yrityksen toimiala</label>: <br />
       <select type="text" name="industry">
         <option value="Kulutustavarat">Kulutustavara</option>
         <option value="Elintarvikkeet">Elintarvikkeet</option>
@@ -89,6 +95,7 @@
         <option value="Elektroniikka">Elektroniikka</option>
       </select>
     </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
   {% endif %}

@@ -1,6 +1,7 @@
 import sqlite3
+import secrets
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import config
@@ -18,7 +19,7 @@ def index():
 
 @app.route("/new_listing", methods = ["POST"])
 def new_listing():
-
+    check_csrf()
     company_name = request.form["company_name"]
     stock_amount = request.form["stock_amount"]
     industry = request.form["industry"]
@@ -29,7 +30,7 @@ def new_listing():
 
 @app.route("/new_buy_order/<int:company_id>", methods = ["POST"])
 def new_buy_order(company_id):
-
+    check_csrf()
     stock_buy_amount = request.form["stock_buy_amount"]
     buy_price = request.form["stock_buy_price"]
     user_id = user.get_user_id(session["username"])[0]["id"]
@@ -39,7 +40,7 @@ def new_buy_order(company_id):
 
 @app.route("/new_sell_order/<int:company_id>", methods = ["POST"])
 def new_sell_order(company_id):
-
+    check_csrf()
     stock_sell_amount = request.form["stock_sell_amount"]
     sell_price = request.form["stock_sell_price"]
     user_id = user.get_user_id(session["username"])[0]["id"]
@@ -95,6 +96,7 @@ def edit_company(company_id):
         return render_template("edit.html", company=company[0])
 
     if request.method == "POST":
+        check_csrf()
         name = request.form["company_name"]
         industry = request.form["industry"]
         exchange.update_company(company[0]["id"], name, industry)
@@ -115,6 +117,7 @@ def remove_company(company_id):
             return "Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!"
         
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             exchange.remove_company(company[0]["id"])
             return redirect("/")
@@ -155,10 +158,14 @@ def login():
         password = request.form["password"]
         
         sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        result = db.query(sql, [username])
+        if len(result) == 0:
+            return "VIRHE: väärä tunnus tai salasana"
+        password_hash = result[0][0]
 
         if check_password_hash(password_hash, password):
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"
@@ -168,3 +175,6 @@ def logout():
     del session["username"]
     return redirect("/")
 
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)

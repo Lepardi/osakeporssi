@@ -12,7 +12,7 @@
     <h2>Haku</h2>
     <form action="/search" method="get">
         <p>
-        Hakusana:
+        <label for="query">Hakusana</label>: <br />
         {% if query %}
         <input type="text" name="query" value="{{ query }}" />
         {% else %}
