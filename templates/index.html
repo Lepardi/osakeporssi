@@ -20,6 +20,15 @@
 
   <h1>Pörssi</h1>
 
+  {% if session.username %}
+    <p>Tervetuloa pörssiin. Sivun alalaidassa voit listata pörssiin uusia yrityksiä. </p>
+    <p>Voit tehdä ostotarjouksia yritysten osakkeista ja myyntitarjouksia yrityksistä joiden osakkeita omistat. </p>
+  {% else %}
+    <p>Tervetuloa pörssiin. Kirjaudu sisään niin voit listata uusia yrityksiä ja tehdä osto- ja myyntitarjouksia. </p>
+  {% endif %}
+    <p>Voit tarkastella olemassa olevia osto- ja myyntitarjouksia sivun ylälaidan linkin kautta.</p>
+    <p>"Käyttäjät" linkin kautta pääset tarkastelemaan pörssin käyttäjiä ja heidän listaamiaan yrityksiä sekä portfolioita.</p>
+
   <h3>Haku</h3>
   <form action="/search" method="get">
       <p>
@@ -82,7 +91,6 @@
   {% endfor %}
 
   {% if session.username %}
-
   <h3>Listaa uusi yritys</h3>
 
   <form action="/new_listing" method="post">

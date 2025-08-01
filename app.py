@@ -146,7 +146,7 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        flash("VIRHE: salasanat eivät ole samat")
+        flash("VIRHE: Salasanat eivät ole samat")
         return redirect("/register")
     password_hash = generate_password_hash(password1)
 
@@ -154,7 +154,7 @@ def create():
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        flash("VIRHE: tunnus on jo varattu")
+        flash("VIRHE: Tunnus on jo varattu")
         return redirect("/register")
 
     flash("Tunnus luotu. Palaa etusivulle missä voit kirjautua sisään.")
@@ -174,7 +174,7 @@ def login():
         sql = "SELECT password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])
         if len(result) == 0:
-            flash("VIRHE: väärä tunnus tai salasana")
+            flash("VIRHE: Väärä tunnus tai salasana")
             return redirect("/login")
         password_hash = result[0][0]
 
@@ -183,7 +183,7 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
-            flash("VIRHE: väärä tunnus tai salasana")
+            flash("VIRHE: Väärä tunnus tai salasana")
             return redirect("/login")
 
 @app.route("/logout")
