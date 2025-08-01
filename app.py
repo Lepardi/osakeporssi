@@ -21,9 +21,13 @@ def index():
 def new_listing():
     check_csrf()
     company_name = request.form["company_name"]
-    stock_amount = request.form["stock_amount"]
+    stock_amount = int(request.form["stock_amount"])
     industry = request.form["industry"]
     lister_name = session["username"]
+
+    if not company_name or len(company_name ) > 100 or stock_amount > 1000000 or stock_amount < 1:
+        abort(403)
+
     try:
         exchange.new_listing(company_name, stock_amount, lister_name, industry)
         return redirect("/")
@@ -34,19 +38,29 @@ def new_listing():
 @app.route("/new_buy_order/<int:company_id>", methods = ["POST"])
 def new_buy_order(company_id):
     check_csrf()
-    stock_buy_amount = request.form["stock_buy_amount"]
-    buy_price = request.form["stock_buy_price"]
+    stock_buy_amount = int(request.form["stock_buy_amount"])
+    buy_price = int(request.form["stock_buy_price"])
     user_id = user.get_user_id(session["username"])[0]["id"]
 
-    exchange. add_buy_order(user_id, company_id, stock_buy_amount, buy_price)
+    if not buy_price or not stock_buy_amount:
+        abort(403)
+    if buy_price > 1000000 or buy_price < 1 or stock_buy_amount > 1000000 or stock_buy_amount < 1:
+        abort(403)
+
+    exchange.add_buy_order(user_id, company_id, stock_buy_amount, buy_price)
     return redirect("/orders")
 
 @app.route("/new_sell_order/<int:company_id>", methods = ["POST"])
 def new_sell_order(company_id):
     check_csrf()
-    stock_sell_amount = request.form["stock_sell_amount"]
-    sell_price = request.form["stock_sell_price"]
+    stock_sell_amount = int(request.form["stock_sell_amount"])
+    sell_price = int(request.form["stock_sell_price"])
     user_id = user.get_user_id(session["username"])[0]["id"]
+
+    if not sell_price or not stock_sell_amount:
+        abort(403)
+    if sell_price > 1000000 or sell_price < 1 or stock_sell_amount > 1000000 or stock_sell_amount < 1:
+        abort(403)
 
     if len(user.get_owned_stock_amount(session["username"], company_id)) == 0:
         amount_of_stock_owned = 0
@@ -58,7 +72,7 @@ def new_sell_order(company_id):
                 + str(amount_of_stock_owned) +" osaketta.")
         return redirect("/")
 
-    exchange. add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
+    exchange.add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
     return redirect("/orders")
 
 @app.route("/orders")
@@ -104,6 +118,10 @@ def edit_company(company_id):
         check_csrf()
         name = request.form["company_name"]
         industry = request.form["industry"]
+
+        if not name or len(name ) > 100:
+            abort(403)
+
         try:
             exchange.update_company(company[0]["id"], name, industry)
             return redirect("/")

@@ -63,9 +63,9 @@
   <p>
   <form action="/new_buy_order/{{ company.id }}" method="post">
     <label for="stock_buy_amount">Määrä</label>:
-    <input type="number" name="stock_buy_amount" size="5" min="1" required/> &nbsp &nbsp
+    <input type="number" name="stock_buy_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
     <label for="stock_buy_price">Hinta</label>:
-    <input type="number" name="stock_buy_price" size="5" min="1" required/> 
+    <input type="number" name="stock_buy_price" size="5" min="1" max="1000000" required/> 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Osta" />
   </form> 
@@ -73,9 +73,9 @@
   <p>
   <form action="/new_sell_order/{{ company.id }}" method="post">
     <label for="stock_sell_amount">Määrä</label>:
-    <input type="number" name="stock_sell_amount" size="5" min="1" required/> &nbsp &nbsp
+    <input type="number" name="stock_sell_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
     <label for="stock_sell_price">Hinta</label>:
-    <input type="number" name="stock_sell_price" size="5" min="1" required/> 
+    <input type="number" name="stock_sell_price" size="5" min="1" max="1000000" required/> 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Myy" />
   </form> 
@@ -96,11 +96,11 @@
   <form action="/new_listing" method="post">
     <p>
       <label for="company_name">Yrityksen nimi</label>: <br />
-      <input type="text" name="company_name" required/>
+      <input type="text" name="company_name" maxlength="100" required/>
     </p>
     <p>
       <label for="stock_amount">Osakkeiden määrä</label>: <br />
-      <input type="number" name="stock_amount" min="1"/>
+      <input type="number" name="stock_amount" min="1" max="1000000"/>
     </p>
     <p>
       <label for="industry">Yrityksen toimiala</label>: <br />
