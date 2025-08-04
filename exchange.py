@@ -64,14 +64,25 @@ def add_to_portfolio(username, company_name, stock_amount):
             VALUES (?, ?, ?)"""
     db.execute(sql, [user_id[0]["id"], company_id[0]["id"], stock_amount])
 
-def search(query):
+def search(query, page, page_size):
     sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
             IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
             FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
             LEFT JOIN sell_orders s ON c.id = s.company_id
             WHERE name LIKE ? OR industry LIKE ?
-            GROUP BY c.id"""
-    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
+            GROUP BY c.id
+            LIMIT ? OFFSET ?"""
+    
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, ["%" + query + "%", "%" + query + "%", limit, offset])
+
+def get_search_row_count(query):
+    sql = """SELECT COUNT(c.id) FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+            LEFT JOIN sell_orders s ON c.id = s.company_id
+            WHERE name LIKE ? OR industry LIKE ?"""
+    
+    return db.query(sql, ["%" + query + "%", "%" + query + "%"])[0][0]
 
 def update_company(company_id, company_name, industry):
     sql = "UPDATE companies SET name = ?, industry = ? WHERE id = ?"

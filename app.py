@@ -30,10 +30,22 @@ def index(page=1):
     return render_template("index.html", page=page, page_count=page_count, companies=companies)
 
 @app.route("/search")
-def search():
+@app.route("/search/<int:page>")
+def search(page=1):
     query = request.args.get("query")
-    results = exchange.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
+    page_size = 5
+    results = exchange.search(query, page, page_size) if query else []
+    company_count = exchange.get_search_row_count(query)
+
+    page_count = math.ceil(company_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/search?query="+query)
+    if page > page_count:
+        return redirect("/search/"+str(page_count)+"?query="+query)
+
+    return render_template("search.html", page=page, page_count=page_count, query=query, results=results)
 
 @app.route("/new_listing", methods = ["POST"])
 def new_listing():
