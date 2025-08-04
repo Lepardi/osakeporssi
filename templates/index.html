@@ -95,8 +95,16 @@
     {% endif %}
     <hr />
     {% endfor %}
+
+    <p>
+      <a href="/{{ page - 1 }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a href="/{{ page + 1 }}">&gt;&gt;</a>
+    </p>
+    <hr />
   </div>
   
+
   <div class="new_listing">
     {% if session.username %}
     <h3>Listaa uusi yritys</h3>

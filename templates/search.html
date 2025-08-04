@@ -8,38 +8,41 @@
 </head>
 <body>  
     <p>
-      <div class="nav"><
+      <div class="nav">
         <a href="/">Palaa etusivulle</a>
-      /div>
+      </div>
     </p>
-    <h2>Haku</h2>
-    <form action="/search" method="get">
+
+    <div class="content">
+      <h2>Haku</h2>
+      <form action="/search" method="get">
       <p>
-        <label for="query">Hakusana</label>: <br />
-        {% if query %}
-        <input type="text" name="query" value="{{ query }}" />
-        {% else %}
-        <input type="text" name="query" />
-        {% endif %}
+          <label for="query">Hakusana</label>: <br />
+          {% if query %}
+          <input type="text" name="query" value="{{ query }}" />
+          {% else %}
+          <input type="text" name="query" />
+          {% endif %}
       </p>
       <input type="submit" value="Hae" />
-    </form>
+      </form>
 
-    {% if query %}
-    <hr />
-    <h3>Tulokset:</h3>
+      {% if query %}
+      <hr />
+      <h3>Tulokset:</h3>
     
-    <hr />
-    {% for company in results %}
-    <p> <b>{{ company.name }}</b> </p>
-    <p>  Korkein ostotarjous:  {{ company.max }} € </p>
-    <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
-    <p>
-        Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
-    </p>
-    <hr />
-    {% endfor %}
-    </ul>
-    {% endif %}
+      <hr />
+      {% for company in results %}
+      <p> <b>{{ company.name }}</b> </p>
+      <p>  Korkein ostotarjous:  {{ company.max }} € </p>
+      <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
+      <p>
+          Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
+      </p>
+      <hr />
+      {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
 
 </body>

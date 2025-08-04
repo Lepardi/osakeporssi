@@ -8,14 +8,32 @@ import config
 import db
 import exchange
 import user
+import math
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
-def index():
-    companies = exchange.get_companies()
-    return render_template("index.html", companies = companies)
+@app.route("/<int:page>")
+def index(page=1):
+    page_size = 5
+    company_count = exchange.get_company_count()
+    page_count = math.ceil(company_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    companies = exchange.get_companies(page, page_size)
+    return render_template("index.html", page=page, page_count=page_count, companies=companies)
+
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = exchange.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
 
 @app.route("/new_listing", methods = ["POST"])
 def new_listing():
@@ -97,12 +115,6 @@ def show_user(username):
                             username=username, companies=companies,
                             sell_order_amount=sell_order_amount,
                             buy_order_amount=buy_order_amount)
-
-@app.route("/search")
-def search():
-    query = request.args.get("query")
-    results = exchange.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
 
 @app.route("/edit/<int:company_id>", methods=["GET", "POST"])
 def edit_company(company_id):

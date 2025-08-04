@@ -1,12 +1,19 @@
 import db
 
-def get_companies():
+def get_companies(page, page_size):
     sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
             IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
             FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
             LEFT JOIN sell_orders s ON c.id = s.company_id
-            GROUP BY c.id"""
-    return db.query(sql)
+            GROUP BY c.id
+            LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
+
+def get_company_count():
+    sql = "SELECT COUNT(id) FROM companies"
+    return db.query(sql)[0][0]
 
 def get_company(company_id):
     sql = """SELECT id, name, stock_amount, last_price, owner, industry
