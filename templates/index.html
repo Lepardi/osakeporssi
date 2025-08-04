@@ -3,120 +3,127 @@
 
 <head>
   <title>Etusivu</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }} &nbsp &nbsp
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-    <a href="/register">Luo tunnus</a> |
-    <a href="/login">Kirjaudu sisään</a>
-  {% endif %}
+  <div class="nav">
+    {% if session.username %}
+    <p>
+      Olet kirjautunut nimellä {{ session.username }} &nbsp &nbsp
+      <a href="/logout">Kirjaudu ulos</a>
+    </p>
+    {% else %}
+      <a href="/register">Luo tunnus</a> |
+      <a href="/login">Kirjaudu sisään</a>
+    {% endif %}
 
-  <p><a href="/users">Käyttäjät</a> &nbsp | &nbsp <a href="/orders">Osto- ja myyntitarjoukset</a></p>
-
-  <h1>Pörssi</h1>
-
-  {% if session.username %}
-    <p>Tervetuloa pörssiin. Sivun alalaidassa voit listata pörssiin uusia yrityksiä. </p>
-    <p>Voit tehdä ostotarjouksia yritysten osakkeista ja myyntitarjouksia yrityksistä joiden osakkeita omistat. </p>
-  {% else %}
-    <p>Tervetuloa pörssiin. Kirjaudu sisään niin voit listata uusia yrityksiä ja tehdä osto- ja myyntitarjouksia. </p>
-  {% endif %}
-    <p>Voit tarkastella olemassa olevia osto- ja myyntitarjouksia sivun ylälaidan linkin kautta.</p>
-    <p>"Käyttäjät" linkin kautta pääset tarkastelemaan pörssin käyttäjiä ja heidän listaamiaan yrityksiä sekä portfolioita.</p>
-
-  <h3>Haku</h3>
-  <form action="/search" method="get">
-      <p>
-      <label for="query">Hakusana</label>: <br />
-      {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
-      {% else %}
-      <input type="text" name="query" />
-      {% endif %}
-      </p>
-      <input type="submit" value="Hae" />
-  </form>
-
-  {% for message in get_flashed_messages() %}
-  <p>
-  <div class="info">
-    <b style='color:red;'> {{ message }} </b>
+    <p><a href="/users">Käyttäjät</a> &nbsp | &nbsp <a href="/orders">Osto- ja myyntitarjoukset</a></p>
   </div>
-  </p>
-  {% endfor %}
 
-  <hr />
-  {% for company in companies %}
-  <p> <b>{{ company.name }}</b> </p>
-  <p>  Korkein ostotarjous:  {{ company.max }} € </p>
-  <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
+  <div class="header"> 
+    <h1>Pörssi</h1> 
+  </div>
+
+  <div class="content">
+    {% if session.username %}
+      <p>Tervetuloa pörssiin. Sivun alalaidassa voit listata pörssiin uusia yrityksiä. </p>
+      <p>Voit tehdä ostotarjouksia yritysten osakkeista ja myyntitarjouksia yrityksistä joiden osakkeita omistat. </p>
+    {% else %}
+      <p>Tervetuloa pörssiin. Kirjaudu sisään niin voit listata uusia yrityksiä ja tehdä osto- ja myyntitarjouksia. </p>
+    {% endif %}
+      <p>Voit tarkastella olemassa olevia osto- ja myyntitarjouksia sivun ylälaidan linkin kautta.</p>
+      <p>"Käyttäjät" linkin kautta pääset tarkastelemaan pörssin käyttäjiä ja heidän listaamiaan yrityksiä sekä portfolioita.</p>
+
+    <h3>Haku</h3>
+    <form action="/search" method="get">
+        <p>
+        <label for="query">Hakusana</label>: <br />
+        {% if query %}
+        <input type="text" name="query" value="{{ query }}" />
+        {% else %}
+        <input type="text" name="query" />
+        {% endif %}
+        </p>
+        <input type="submit" value="Hae" />
+    </form>
+
+    {% for message in get_flashed_messages() %}
+    <p>
+    <div class="info">
+      <b style='color:red;'> {{ message }} </b>
+    </div>
+    </p>
+    {% endfor %}
+
+    <hr />
+    {% for company in companies %}
+    <p> <b>{{ company.name }}</b> </p>
+    <p>  Korkein ostotarjous:  {{ company.max }} € </p>
+    <p>  Matalin myyntitarjous:  {{ company.min }} € </p>
+    
+    <p>
+      Toimiala: {{ company.industry }} &nbsp | &nbsp Listaaja: {{ company.owner }} &nbsp | &nbsp Osakkeita: {{ company.stock_amount }}
+    </p>
+    {% if session.username %}
+    <p>
+    <form action="/new_buy_order/{{ company.id }}" method="post">
+      <label for="stock_buy_amount">Määrä</label>:
+      <input type="number" name="stock_buy_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
+      <label for="stock_buy_price">Hinta</label>:
+      <input type="number" name="stock_buy_price" size="5" min="1" max="1000000" required/> 
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Osta" />
+    </form> 
+    </p>
+    <p>
+    <form action="/new_sell_order/{{ company.id }}" method="post">
+      <label for="stock_sell_amount">Määrä</label>:
+      <input type="number" name="stock_sell_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
+      <label for="stock_sell_price">Hinta</label>:
+      <input type="number" name="stock_sell_price" size="5" min="1" max="1000000" required/> 
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Myy" />
+    </form> 
+    </p>
+    {% endif %}
+    {% if company.owner == session.username %}
+    <p>
+      <a href="/edit/{{ company.id }}">Muokkaa</a> |
+      <a href="/remove/{{ company.id }}">Poista</a>
+    </p>
+    {% endif %}
+    <hr />
+    {% endfor %}
+  </div>
   
-  <p>
-    Toimiala: {{ company.industry }} &nbsp | &nbsp Listaaja: {{ company.owner }} &nbsp | &nbsp Osakkeita: {{ company.stock_amount }}
-  </p>
-  {% if session.username %}
-  <p>
-  <form action="/new_buy_order/{{ company.id }}" method="post">
-    <label for="stock_buy_amount">Määrä</label>:
-    <input type="number" name="stock_buy_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
-    <label for="stock_buy_price">Hinta</label>:
-    <input type="number" name="stock_buy_price" size="5" min="1" max="1000000" required/> 
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Osta" />
-  </form> 
-  </p>
-  <p>
-  <form action="/new_sell_order/{{ company.id }}" method="post">
-    <label for="stock_sell_amount">Määrä</label>:
-    <input type="number" name="stock_sell_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
-    <label for="stock_sell_price">Hinta</label>:
-    <input type="number" name="stock_sell_price" size="5" min="1" max="1000000" required/> 
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Myy" />
-  </form> 
-  </p>
-  {% endif %}
-  {% if company.owner == session.username %}
-  <p>
-    <a href="/edit/{{ company.id }}">Muokkaa</a> |
-    <a href="/remove/{{ company.id }}">Poista</a>
-  </p>
-  {% endif %}
-  <hr />
-  {% endfor %}
+  <div class="new_listing">
+    {% if session.username %}
+    <h3>Listaa uusi yritys</h3>
 
-  {% if session.username %}
-  <h3>Listaa uusi yritys</h3>
-
-  <form action="/new_listing" method="post">
-    <p>
-      <label for="company_name">Yrityksen nimi</label>: <br />
-      <input type="text" name="company_name" maxlength="100" required/>
-    </p>
-    <p>
-      <label for="stock_amount">Osakkeiden määrä</label>: <br />
-      <input type="number" name="stock_amount" min="1" max="1000000"/>
-    </p>
-    <p>
-      <label for="industry">Yrityksen toimiala</label>: <br />
-      <select type="text" name="industry">
-        <option value="Kulutustavarat">Kulutustavara</option>
-        <option value="Elintarvikkeet">Elintarvikkeet</option>
-        <option value="Teollisuus">Teollisuus</option>
-        <option value="Elektroniikka">Elektroniikka</option>
-      </select>
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
-  </form>
-  {% endif %}
-
+    <form action="/new_listing" method="post">
+      <p>
+        <label for="company_name">Yrityksen nimi</label>: <br />
+        <input type="text" name="company_name" maxlength="100" required/>
+      </p>
+      <p>
+        <label for="stock_amount">Osakkeiden määrä</label>: <br />
+        <input type="number" name="stock_amount" min="1" max="1000000"/>
+      </p>
+      <p>
+        <label for="industry">Yrityksen toimiala</label>: <br />
+        <select type="text" name="industry">
+          <option value="Kulutustavarat">Kulutustavara</option>
+          <option value="Elintarvikkeet">Elintarvikkeet</option>
+          <option value="Teollisuus">Teollisuus</option>
+          <option value="Elektroniikka">Elektroniikka</option>
+        </select>
+      </p>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Lähetä" />
+    </form>
+    {% endif %}
+  </div>
 
 </body>
-
 </html>

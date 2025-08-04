@@ -3,44 +3,47 @@
 
 <head>
   <title>Kirjautuminen</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  <p>
-    <a href="/">Palaa etusivulle</a>
-  </p>
-  {% else %}
-  <form action="/login" method="post">
+  <div class="content">
+    {% if session.username %}
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
+      Olet kirjautunut nimellä {{ session.username }}
     </p>
     <p>
-      Salasana: <br />
-      <input type="password" name="password" />
+      <a href="/logout">Kirjaudu ulos</a>
     </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
+    <p>
+      <a href="/">Palaa etusivulle</a>
+    </p>
+    {% else %}
+    <form action="/login" method="post">
+      <p>
+        Tunnus: <br />
+        <input type="text" name="username" />
+      </p>
+      <p>
+        Salasana: <br />
+        <input type="password" name="password" />
+      </p>
+      <input type="submit" value="Kirjaudu" />
+    </form>
 
-  {% for message in get_flashed_messages() %}
-  <p>
-  <div class="info">
-    {{ message }}
+    {% for message in get_flashed_messages() %}
+    <p>
+    <div class="info">
+      {{ message }}
+    </div>
+    </p>
+    {% endfor %}
+
+    <p>
+      <a href="/">Palaa etusivulle</a>
+    </p>
+    {% endif %}
   </div>
-  </p>
-  {% endfor %}
-
-  <p>
-    <a href="/">Palaa etusivulle</a>
-  </p>
-  {% endif %}
 </body>
 
 </html>

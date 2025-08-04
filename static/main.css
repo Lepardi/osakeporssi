@@ -1,0 +1,27 @@
+body {
+  margin: auto;
+  max-width: 50em;
+  font-family: sans-serif;
+  background-color: lightblue;
+}
+.nav {
+  background-color: lightblue;
+  margin: 0.5em 0;
+}
+.header {
+  background-color: black;
+  color: white;
+  padding: 0.5em;
+  margin: 1em 0;
+}
+.content {
+  background-color: white;
+  padding: 1em;
+  margin: 0.5em 0;
+}
+.new_listing {
+  background-color: white;
+  padding: 1em;
+  margin: 0.5em 0;
+}
+ 

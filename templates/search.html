@@ -4,22 +4,25 @@
 
 <head>
   <title>Haku</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>  
     <p>
+      <div class="nav"><
         <a href="/">Palaa etusivulle</a>
+      /div>
     </p>
     <h2>Haku</h2>
     <form action="/search" method="get">
-        <p>
+      <p>
         <label for="query">Hakusana</label>: <br />
         {% if query %}
         <input type="text" name="query" value="{{ query }}" />
         {% else %}
         <input type="text" name="query" />
         {% endif %}
-        </p>
-        <input type="submit" value="Hae" />
+      </p>
+      <input type="submit" value="Hae" />
     </form>
 
     {% if query %}

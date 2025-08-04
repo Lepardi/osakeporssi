@@ -3,12 +3,16 @@
 
 <head>
   <title>Osto- ja myyntitarjoukset</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <p>
-    <a href="/">Palaa etusivulle</a>
-  </p>
+  <div class="nav">
+    <p>
+      <a href="/">Palaa etusivulle</a>
+    </p>
+  </div>
+
   <h2>Ostotarjoukset:</h2>
   {% for buy_order in buy_orders %}
   <p>

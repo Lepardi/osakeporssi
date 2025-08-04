@@ -3,13 +3,15 @@
 
 <head>
   <title>Käyttäjä</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <p>
-    <a href="/">Palaa etusivulle</a> | <a href="/users">Käyttäjät</a>
-  </p>
-
+  <div class="nav">
+    <p>
+      <a href="/">Palaa etusivulle</a> | <a href="/users">Käyttäjät</a>
+    </p>
+  </div>
   <p> <b>{{ username }}</b> on tehnyt: <p/>
   <p>{{ buy_order_amount }} ostotarjousta.</p>
   <p>{{ sell_order_amount }} myyntitarjousta.</p>
