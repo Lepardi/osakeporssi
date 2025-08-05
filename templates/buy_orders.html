@@ -13,21 +13,22 @@
     </p>
   </div>
 
-  <h2>Ostotarjoukset:</h2>
-  {% for buy_order in buy_orders %}
-  <p>
-    Ostaja: <b>{{ buy_order.username }}</b> &nbsp Yritys: <b>{{ buy_order.name }}</b> &nbsp 
-    Määrä: <b>{{ buy_order.amount }}</b> &nbsp Hinta: <b>{{ buy_order.price }}</b> €
-  </p>
-  {% endfor %}
-  <hr>
+  <div class="content">
+    <h2>Ostotarjoukset:</h2>
+    {% for buy_order in buy_orders %}
+    <p>
+      Ostaja: <b>{{ buy_order.username }}</b> &nbsp Yritys: <b>{{ buy_order.name }}</b> &nbsp 
+      Määrä: <b>{{ buy_order.amount }}</b> &nbsp Hinta: <b>{{ buy_order.price }}</b> €
+    </p>
+    {% endfor %}
+    <hr>
 
-  <p>
-    <a href="/buy_orders/{{ page - 1 }}">&lt;&lt;</a>
-    Sivu {{ page }}/{{ page_count }}
-    <a href="/buy_orders/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
-
+    <p>
+      <a href="/buy_orders/{{ page - 1 }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a href="/buy_orders/{{ page + 1 }}">&gt;&gt;</a>
+    </p>
+  </div>
 </body>
 
 

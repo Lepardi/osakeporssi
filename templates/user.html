@@ -12,23 +12,30 @@
       <a href="/">Palaa etusivulle</a> | <a href="/users">Käyttäjät</a>
     </p>
   </div>
-  <p> <b>{{ username }}</b> on tehnyt: <p/>
-  <p>{{ buy_order_amount }} ostotarjousta.</p>
-  <p>{{ sell_order_amount }} myyntitarjousta.</p>
 
-  <h3> Käyttäjän {{ username }} portfolio:</h3>
-  <hr />
-  {% for company in portfolio %}
-  <p>
-    {{ company.name }} | Osakkeita {{ company.amount }} kappaletta
-  </p>
-  <hr />
-  {% endfor %}
+  <div class="content">
+    <p> <b>{{ username }}</b> on tehnyt: <p/>
+    <p>{{ buy_order_amount }} ostotarjousta.</p>
+    <p>{{ sell_order_amount }} myyntitarjousta.</p>
+  </div>
 
-  <h3> {{ username }} on listannut seuraavat yritykset:</h3>
-  <hr />
-  {% for company in companies %}
-    {{ company.name }} 
-  <hr />
-  {% endfor %}
+  <div class="content">
+    <h3> Käyttäjän {{ username }} portfolio:</h3>
+    <hr />
+    {% for company in portfolio %}
+    <p>
+      {{ company.name }} | Osakkeita {{ company.amount }} kappaletta
+    </p>
+    <hr />
+    {% endfor %}
+  </div>
+  
+  <div class="content">
+    <h3> {{ username }} on listannut seuraavat yritykset:</h3>
+    <hr />
+    {% for company in companies %}
+      {{ company.name }} 
+    <hr />
+    {% endfor %}
+  </div>
 </body>

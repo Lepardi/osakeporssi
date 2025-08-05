@@ -12,13 +12,16 @@
       <a href="/">Palaa etusivulle</a>
     </p>
   </div>
-  <h2>Käyttäjät</h2>
-  <p>Klikkaa käyttäjän nimeä tarkastellaksesi tämän portfoliota</p>
-  <hr />
-  {% for user in users %}
-  <p>
-    <a href="/users/{{ user.username }}"> {{ user.username }} </a>
 
-  <hr />
-  {% endfor %}
+  <div class="content">
+    <h2>Käyttäjät:</h2>
+    <p>Klikkaa käyttäjän nimeä tarkastellaksesi tämän portfoliota</p>
+    <hr />
+    {% for user in users %}
+    <p>
+      <a href="/users/{{ user.username }}"> {{ user.username }} </a>
+
+    <hr />
+    {% endfor %}
+  </div>
 </body>
