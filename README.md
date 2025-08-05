@@ -8,7 +8,7 @@
   * Käyttäjä näkee sovellukseen listatut yritykset.
   * Käyttäjä pystyy hakemaan yrityksiä hakusanalla.
   * Käyttäjä pystyy tekemään yrityksen osakkeista myynti- ja ostotarjouksia.
-  * Sovelluksessa on sivu jossa näytetään olemassa olevat myynti- ja ostotarjoukset.
+  * Sovelluksessa on sivut joissa näytetään olemassa olevat myynti- ja ostotarjoukset.
   * Sovelluksessa on käyttäjäsivut, joissa näkee käyttäjän listaamat yritykset.
   * Käyttäjäsivulla näytetään kuinka paljon käyttäjällä on voimassa olevia myynti- tai ostotarjouksia.
 

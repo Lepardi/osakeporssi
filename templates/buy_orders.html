@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Ostotarjoukset</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <div class="nav">
+    <p>
+      <a href="/">Palaa etusivulle</a>
+    </p>
+  </div>
+
+  <h2>Ostotarjoukset:</h2>
+  {% for buy_order in buy_orders %}
+  <p>
+    Ostaja: <b>{{ buy_order.username }}</b> &nbsp Yritys: <b>{{ buy_order.name }}</b> &nbsp 
+    Määrä: <b>{{ buy_order.amount }}</b> &nbsp Hinta: <b>{{ buy_order.price }}</b> €
+  </p>
+  {% endfor %}
+  <hr>
+
+</body>
+
+

@@ -26,15 +26,17 @@ def get_company_owners(company_id):
     return db.query(sql, [company_id])
 
 def get_sell_orders():
-    sql = """SELECT seller_id, username, company_id, name, amount, price 
+    sql = """SELECT s.id seller_id, username, company_id, name, amount, price 
             FROM users u, companies c, sell_orders s
-            WHERE s.seller_id = u.id AND s.company_id = c.id"""
+            WHERE s.seller_id = u.id AND s.company_id = c.id
+            ORDER BY s.id DESC"""
     return db.query(sql)
 
 def get_buy_orders():
-    sql = """SELECT buyer_id, username, company_id, name, amount, price 
+    sql = """SELECT b.id, buyer_id, username, company_id, name, amount, price 
             FROM users u, companies c, buy_orders b
-            WHERE b.buyer_id = u.id AND b.company_id = c.id"""
+            WHERE b.buyer_id = u.id AND b.company_id = c.id
+            ORDER BY b.id DESC"""
     return db.query(sql)
 
 def add_buy_order(buyer_id, company_id, amount, price):

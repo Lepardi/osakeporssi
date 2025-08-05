@@ -1,7 +1,7 @@
 import sqlite3
 import secrets
 from flask import Flask
-from flask import abort, redirect, render_template, request, session, flash
+from flask import abort, redirect, render_template, request, session, flash, g
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import config
@@ -9,6 +9,7 @@ import db
 import exchange
 import user
 import math
+import time
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -78,7 +79,7 @@ def new_buy_order(company_id):
         abort(403)
 
     exchange.add_buy_order(user_id, company_id, stock_buy_amount, buy_price)
-    return redirect("/orders")
+    return redirect("/buy_orders")
 
 @app.route("/new_sell_order/<int:company_id>", methods = ["POST"])
 def new_sell_order(company_id):
@@ -103,13 +104,23 @@ def new_sell_order(company_id):
         return redirect("/")
 
     exchange.add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
-    return redirect("/orders")
+    return redirect("/sell_orders")
 
-@app.route("/orders")
-def show_orders():
+#@app.route("/orders")
+#def show_orders():
+#    buy_orders = exchange.get_buy_orders()
+#    sell_orders = exchange.get_sell_orders()
+#    return render_template("orders.html", buy_orders=buy_orders, sell_orders=sell_orders)
+
+@app.route("/buy_orders")
+def show_buy_orders():
     buy_orders = exchange.get_buy_orders()
+    return render_template("buy_orders.html", buy_orders=buy_orders)
+
+@app.route("/sell_orders")
+def show_sell_orders():
     sell_orders = exchange.get_sell_orders()
-    return render_template("orders.html", buy_orders=buy_orders, sell_orders=sell_orders)
+    return render_template("sell_orders.html", sell_orders=sell_orders)
 
 @app.route("/users")
 def show_users():
@@ -236,3 +247,13 @@ def logout():
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
