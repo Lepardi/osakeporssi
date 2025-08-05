@@ -106,21 +106,37 @@ def new_sell_order(company_id):
     exchange.add_sell_order(user_id, company_id, stock_sell_amount, sell_price)
     return redirect("/sell_orders")
 
-#@app.route("/orders")
-#def show_orders():
-#    buy_orders = exchange.get_buy_orders()
-#    sell_orders = exchange.get_sell_orders()
-#    return render_template("orders.html", buy_orders=buy_orders, sell_orders=sell_orders)
-
 @app.route("/buy_orders")
-def show_buy_orders():
-    buy_orders = exchange.get_buy_orders()
-    return render_template("buy_orders.html", buy_orders=buy_orders)
+@app.route("/buy_orders/<int:page>")
+def show_buy_orders(page=1):
+    page_size = 20
+    buy_order_count = exchange.get_buy_order_count()
+    page_count = math.ceil(buy_order_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/buy_orders")
+    if page > page_count:
+        return redirect("/buy_orders/" + str(page_count))
+
+    buy_orders = exchange.get_buy_orders(page, page_size)
+    return render_template("buy_orders.html", buy_orders=buy_orders, page=page, page_count=page_count)
 
 @app.route("/sell_orders")
-def show_sell_orders():
-    sell_orders = exchange.get_sell_orders()
-    return render_template("sell_orders.html", sell_orders=sell_orders)
+@app.route("/sell_orders/<int:page>")
+def show_sell_orders(page=1):
+    page_size = 20
+    sell_order_count = exchange.get_sell_order_count()
+    page_count = math.ceil(sell_order_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/sell_orders")
+    if page > page_count:
+        return redirect("/sell_orders/" + str(page_count))
+
+    sell_orders = exchange.get_sell_orders(page, page_size)
+    return render_template("sell_orders.html", sell_orders=sell_orders, page=page, page_count=page_count)
 
 @app.route("/users")
 def show_users():

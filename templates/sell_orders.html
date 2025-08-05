@@ -20,4 +20,11 @@
     Määrä: <b>{{ sell_order.amount }}</b> &nbsp Hinta: <b>{{ sell_order.price }}</b> €
   </p>
   {% endfor %}
+
+  <p>
+    <a href="/sell_orders/{{ page - 1 }}">&lt;&lt;</a>
+    Sivu {{ page }}/{{ page_count }}
+    <a href="/sell_orders/{{ page + 1 }}">&gt;&gt;</a>
+  </p>
+
 </body>

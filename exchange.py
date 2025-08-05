@@ -25,19 +25,33 @@ def get_company_owners(company_id):
             WHERE company_id = ? AND p.user_id = u.id"""
     return db.query(sql, [company_id])
 
-def get_sell_orders():
+def get_sell_orders(page, page_size):
     sql = """SELECT s.id seller_id, username, company_id, name, amount, price 
             FROM users u, companies c, sell_orders s
             WHERE s.seller_id = u.id AND s.company_id = c.id
-            ORDER BY s.id DESC"""
-    return db.query(sql)
+            ORDER BY s.id DESC
+            LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
 
-def get_buy_orders():
+def get_sell_order_count():
+    sql = "SELECT COUNT(id) FROM sell_orders"
+    return db.query(sql)[0][0]
+
+def get_buy_orders(page, page_size):
     sql = """SELECT b.id, buyer_id, username, company_id, name, amount, price 
             FROM users u, companies c, buy_orders b
             WHERE b.buyer_id = u.id AND b.company_id = c.id
-            ORDER BY b.id DESC"""
-    return db.query(sql)
+            ORDER BY b.id DESC
+            LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
+
+def get_buy_order_count():
+    sql = "SELECT COUNT(id) FROM buy_orders"
+    return db.query(sql)[0][0]
 
 def add_buy_order(buyer_id, company_id, amount, price):
     sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) 
