@@ -31,3 +31,27 @@ Voit käynnistää sovelluksen näin:
 ```
 $ flask run
 ```
+
+## Sovelluksen toiminta suurella tietomäärällä
+
+Skriptin seed.py avulla sovellukseen luodaan miljoona yritystä ja 10 osto- ja myyntitarjousta per yritys.
+Voit luoda testidataa näin:
+```
+$ python seed.py
+```
+
+Ilman indeksointia etusivun lataaminen vie noin 30 sekuntia per sivu tekijän tietokoneella. 
+Ilman indeksointia kunkin käyttäjän sivun lataaminen vie noin 6 sekuntia tekijä tietokoneella.
+Ilman indeksointia myynti- ja ostotarjous sivujen lataaminen vie noin 1.5-2 sekuntia per sivu tekijän tietokoneella. 
+
+Kun tietokantaan luodaan indeksit helpottamaan yritysten hakua id:n perusteella sell_order ja buy_order tauluista, nopeutuu etusivun sivujen lataaminen noin 0.3 sekunttiin.
+Kun tietokantaan luodaan myös indeksit helpottamaan käyttäjien hakua id:n perusteella sell_order ja buy_order tauluista, nopeutuu käyttäjäsivujen lataaminen noin 0.5-1 sekunttiin.
+Näiden indeksien lisääminen ei vaikuttanut myynti- ja ostotarjous sivujen latausnopeuksiin.
+
+Indeksit on luotu seuraavasti ja ne lisätään tietokantaan schema.sql tiedoston mukana:
+```
+CREATE INDEX idx_sell_order_companies ON sell_orders (company_id);
+CREATE INDEX idx_buy_order_companies ON buy_orders (company_id);
+CREATE INDEX idx_sell_order_users ON sell_orders (seller_id);
+CREATE INDEX idx_buy_order_users ON buy_orders (buyer_id);
+```

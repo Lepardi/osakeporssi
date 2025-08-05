@@ -33,3 +33,11 @@ CREATE TABLE buy_orders (
     company_id INTEGER REFERENCES companies, 
     amount INTEGER, 
     price INTEGER);
+
+CREATE INDEX idx_sell_order_companies ON sell_orders (company_id);
+
+CREATE INDEX idx_buy_order_companies ON buy_orders (company_id);
+
+CREATE INDEX idx_sell_order_users ON sell_orders (seller_id);
+
+CREATE INDEX idx_buy_order_users ON buy_orders (buyer_id);
