@@ -46,6 +46,7 @@ Ilman indeksointia kunkin käyttäjän sivun lataaminen vie noin 6 sekuntia.
 
 Ilman indeksointia myynti- ja ostotarjous sivujen lataaminen vie noin 1.5-2 sekuntia per sivu. 
 
+
 Kun tietokantaan luodaan indeksit helpottamaan yritysten hakua id:n perusteella sell_order ja buy_order tauluista, nopeutuu etusivun sivujen lataaminen noin 0.3 sekunttiin.
 
 Kun tietokantaan luodaan myös indeksit helpottamaan käyttäjien hakua id:n perusteella sell_order ja buy_order tauluista, nopeutuu käyttäjäsivujen lataaminen noin 0.5-1 sekunttiin.

@@ -2,8 +2,7 @@ import sqlite3
 import secrets
 from flask import Flask
 from flask import abort, redirect, render_template, request, session, flash, g
-from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
 import exchange
@@ -214,9 +213,16 @@ def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
-    if password1 != password2:
-        flash("VIRHE: Salasanat eivät ole samat")
+    if not username.strip():
+        flash("VIRHE: Kirjoita käyttäjätunnus.")
         return redirect("/register")
+    if password1 != password2:
+        flash("VIRHE: Salasanat eivät ole samat.")
+        return redirect("/register")
+    if not password1.strip() and not password2.strip():
+        flash("VIRHE: Kirjoita salasana.")
+        return redirect("/register")
+    
     password_hash = generate_password_hash(password1)
 
     try:
