@@ -11,15 +11,15 @@
     <form action="/create" method="post">
       <p>
         <label for="username">Tunnus</label>: <br />
-        <input type="text" name="username" required/>
+        <input type="text" name="username" required minlength="2" maxlength="20" />
       </p>
       <p>
         <label for="password1">Salasana</label>: <br />
-        <input type="password" name="password1" required/>
+        <input type="password" name="password1" required minlength="4" maxlength="20" />
       </p>
       <p>
         <label for="password2">Salasana uudestaan</label>: <br />
-        <input type="password" name="password2" required/>
+        <input type="password" name="password2" required minlength="4" maxlength="20" />
       </p>
       <input type="submit" value="Luo tunnus" />
     </form>

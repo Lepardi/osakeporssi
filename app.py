@@ -216,11 +216,20 @@ def create():
     if not username.strip():
         flash("VIRHE: Kirjoita käyttäjätunnus.")
         return redirect("/register")
+    if len(username) < 2 or len(username) < 20:
+        flash("VIRHE: Käyttäjätunnuksen tulee olla 2-20 merkkiä pitkä.")
+        return redirect("/register")
     if password1 != password2:
         flash("VIRHE: Salasanat eivät ole samat.")
         return redirect("/register")
     if not password1.strip() and not password2.strip():
         flash("VIRHE: Kirjoita salasana.")
+        return redirect("/register")
+    if len(password1) < 2 or len(password1) < 20:
+        flash("VIRHE: Salasanan tulee olla 4-20 merkkiä pitkä.")
+        return redirect("/register")
+    if len(password2) < 2 or len(password2) < 20:
+        flash("VIRHE: Salasanan tulee olla 4-20 merkkiä pitkä.")
         return redirect("/register")
     
     password_hash = generate_password_hash(password1)
