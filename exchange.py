@@ -1,9 +1,9 @@
 import db
 
 def get_companies(page, page_size):
-    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
+    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry,
             IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
-            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id
             LEFT JOIN sell_orders s ON c.id = s.company_id
             GROUP BY c.id
             LIMIT ? OFFSET ?"""
@@ -21,12 +21,12 @@ def get_company(company_id):
     return db.query(sql, [company_id])
 
 def get_company_owners(company_id):
-    sql = """SELECT username FROM portfolios p, users u 
+    sql = """SELECT username FROM portfolios p, users u
             WHERE company_id = ? AND p.user_id = u.id"""
     return db.query(sql, [company_id])
 
 def get_sell_orders(page, page_size):
-    sql = """SELECT s.id seller_id, username, company_id, name, amount, price 
+    sql = """SELECT s.id seller_id, username, company_id, name, amount, price
             FROM users u, companies c, sell_orders s
             WHERE s.seller_id = u.id AND s.company_id = c.id
             ORDER BY s.id DESC
@@ -40,7 +40,7 @@ def get_sell_order_count():
     return db.query(sql)[0][0]
 
 def get_buy_orders(page, page_size):
-    sql = """SELECT b.id, buyer_id, username, company_id, name, amount, price 
+    sql = """SELECT b.id, buyer_id, username, company_id, name, amount, price
             FROM users u, companies c, buy_orders b
             WHERE b.buyer_id = u.id AND b.company_id = c.id
             ORDER BY b.id DESC
@@ -54,50 +54,50 @@ def get_buy_order_count():
     return db.query(sql)[0][0]
 
 def add_buy_order(buyer_id, company_id, amount, price):
-    sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price) 
+    sql = """INSERT INTO buy_orders (buyer_id, company_id, amount, price)
             VALUES (?, ?, ?, ?)"""
     db.execute(sql, [buyer_id, company_id, amount, price])
 
 def add_sell_order(seller_id, company_id, amount, price):
-    sql = """INSERT INTO sell_orders (seller_id, company_id, amount, price) 
+    sql = """INSERT INTO sell_orders (seller_id, company_id, amount, price)
             VALUES (?, ?, ?, ?)"""
     db.execute(sql, [seller_id, company_id, amount, price])
 
 def new_listing(company_name, stock_amount, lister_name, industry):
-    sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry) 
+    sql = """INSERT INTO companies (name, stock_amount, last_price, owner, industry)
             VALUES (?, ?, ?, ?, ?)"""
     db.execute(sql, [company_name, stock_amount, 0, lister_name, industry])
     add_to_portfolio(lister_name, company_name, stock_amount)
 
 def add_to_portfolio(username, company_name, stock_amount):
-    sql = "SELECT id FROM companies WHERE name = ?" 
+    sql = "SELECT id FROM companies WHERE name = ?"
     company_id = db.query(sql, [company_name])
 
-    sql = "SELECT id FROM users WHERE username = ?" 
+    sql = "SELECT id FROM users WHERE username = ?"
     user_id = db.query(sql, [username])
 
-    sql = """INSERT INTO portfolios (user_id, company_id, amount) 
+    sql = """INSERT INTO portfolios (user_id, company_id, amount)
             VALUES (?, ?, ?)"""
     db.execute(sql, [user_id[0]["id"], company_id[0]["id"], stock_amount])
 
 def search(query, page, page_size):
-    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry, 
+    sql = """SELECT c.id, name, stock_amount, last_price, owner, industry,
             IFNULL(MAX(b.price),0) AS max, IFNULL(MIN(s.price),0) AS min
-            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+            FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id
             LEFT JOIN sell_orders s ON c.id = s.company_id
             WHERE name LIKE ? OR industry LIKE ?
             GROUP BY c.id
             LIMIT ? OFFSET ?"""
-    
+
     limit = page_size
     offset = page_size * (page - 1)
     return db.query(sql, ["%" + query + "%", "%" + query + "%", limit, offset])
 
 def get_search_row_count(query):
-    sql = """SELECT COUNT(c.id) FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id 
+    sql = """SELECT COUNT(c.id) FROM companies c LEFT JOIN buy_orders b ON c.id = b.company_id
             LEFT JOIN sell_orders s ON c.id = s.company_id
             WHERE name LIKE ? OR industry LIKE ?"""
-    
+
     return db.query(sql, ["%" + query + "%", "%" + query + "%"])[0][0]
 
 def update_company(company_id, company_name, industry):

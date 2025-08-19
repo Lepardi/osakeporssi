@@ -1,5 +1,7 @@
 import sqlite3
 import secrets
+import math
+import time
 from flask import Flask
 from flask import abort, redirect, render_template, request, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,8 +9,6 @@ import config
 import db
 import exchange
 import user
-import math
-import time
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -45,7 +45,8 @@ def search(page=1):
     if page > page_count:
         return redirect("/search/"+str(page_count)+"?query="+query)
 
-    return render_template("search.html", page=page, page_count=page_count, query=query, results=results)
+    return render_template("search.html", page=page, page_count=page_count,
+                            query=query, results=results)
 
 @app.route("/new_listing", methods = ["POST"])
 def new_listing():
@@ -89,16 +90,19 @@ def new_sell_order(company_id):
 
     if not sell_price or not stock_sell_amount:
         abort(403)
-    if sell_price > 1000000 or sell_price < 1 or stock_sell_amount > 1000000 or stock_sell_amount < 1:
+    if sell_price > 1000000 or sell_price < 1:
+        abort(403)
+    if stock_sell_amount > 1000000 or stock_sell_amount < 1:
         abort(403)
 
     if len(user.get_owned_stock_amount(session["username"], company_id)) == 0:
         amount_of_stock_owned = 0
     else:
-        amount_of_stock_owned = user.get_owned_stock_amount(session["username"], company_id)[0]["amount"]
+        amount_of_stock_owned = user.get_owned_stock_amount(session["username"],
+                                                            company_id)[0]["amount"]
 
     if int(amount_of_stock_owned) < int(stock_sell_amount):
-        flash("Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain " 
+        flash("Yrität myydä " + str(stock_sell_amount) + " osaketta yrityksestä josta omistat vain "
                 + str(amount_of_stock_owned) +" osaketta.")
         return redirect("/")
 
@@ -119,7 +123,8 @@ def show_buy_orders(page=1):
         return redirect("/buy_orders/" + str(page_count))
 
     buy_orders = exchange.get_buy_orders(page, page_size)
-    return render_template("buy_orders.html", buy_orders=buy_orders, page=page, page_count=page_count)
+    return render_template("buy_orders.html", buy_orders=buy_orders,
+                            page=page, page_count=page_count)
 
 @app.route("/sell_orders")
 @app.route("/sell_orders/<int:page>")
@@ -135,7 +140,8 @@ def show_sell_orders(page=1):
         return redirect("/sell_orders/" + str(page_count))
 
     sell_orders = exchange.get_sell_orders(page, page_size)
-    return render_template("sell_orders.html", sell_orders=sell_orders, page=page, page_count=page_count)
+    return render_template("sell_orders.html", sell_orders=sell_orders,
+                            page=page, page_count=page_count)
 
 @app.route("/users")
 def show_users():
@@ -171,13 +177,13 @@ def edit_company(company_id):
 
         if not name or len(name ) > 100:
             abort(403)
-
         try:
             exchange.update_company(company[0]["id"], name, industry)
             return redirect("/")
         except sqlite3.IntegrityError:
             flash("Tämän niminen yritys on jo listattu!")
             return redirect("/")
+    return redirect("/")
 
 @app.route("/remove/<int:company_id>", methods=["GET", "POST"])
 def remove_company(company_id):
@@ -189,17 +195,17 @@ def remove_company(company_id):
         owners = exchange.get_company_owners(company_id)
         if session["username"] == owners[0]["username"] and len(owners) == 1:
             return render_template("remove.html", company=company[0])
-            
-        else:
-            flash("Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!")
-            return redirect("/")
-        
+
+        flash("Et voi poistaa yritystä jonka osakkeita on myös muiden hallussa!")
+        return redirect("/")
+
     if request.method == "POST":
         check_csrf()
         if "continue" in request.form:
             exchange.remove_company(company[0]["id"])
             return redirect("/")
         return redirect("/")
+    return redirect("/")
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -231,7 +237,7 @@ def create():
     if len(password2) < 2 or len(password2) > 20:
         flash("VIRHE: Salasanan tulee olla 4-20 merkkiä pitkä.")
         return redirect("/register")
-    
+
     password_hash = generate_password_hash(password1)
 
     try:
@@ -250,11 +256,11 @@ def login():
 
     if request.method == "GET":
         return render_template("login.html")
-    
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        
+
         sql = "SELECT password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])
         if len(result) == 0:
@@ -266,9 +272,10 @@ def login():
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        else:
-            flash("VIRHE: Väärä tunnus tai salasana")
-            return redirect("/login")
+
+        flash("VIRHE: Väärä tunnus tai salasana")
+        return redirect("/login")
+    return redirect("/")
 
 @app.route("/logout")
 def logout():
