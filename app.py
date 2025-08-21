@@ -56,7 +56,10 @@ def new_listing():
     industry = request.form["industry"]
     lister_name = session["username"]
 
-    if not company_name or len(company_name ) > 100 or stock_amount > 1000000 or stock_amount < 1:
+    if len(company_name) > 100 or stock_amount > 1000000 or stock_amount < 1:
+        abort(403)
+
+    if not company_name.strip() or not stock_amount:
         abort(403)
 
     try:
@@ -208,35 +211,34 @@ def remove_company(company_id):
     return redirect("/")
 
 
-@app.route("/register", methods=["POST", "GET"])
+@app.route("/register")
 def register():
-    if request.method == "GET":
-        return render_template("register.html")
-    return render_template("register.html")
+    return render_template("register.html", filled={})
 
 @app.route("/create", methods=["POST"])
 def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+    filled = {"username": username}
     if not username.strip():
         flash("VIRHE: Kirjoita käyttäjätunnus.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
     if len(username) < 2 or len(username) > 20:
         flash("VIRHE: Käyttäjätunnuksen tulee olla 2-20 merkkiä pitkä.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
     if password1 != password2:
         flash("VIRHE: Salasanat eivät ole samat.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
     if not password1.strip() and not password2.strip():
         flash("VIRHE: Kirjoita salasana.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
     if len(password1) < 2 or len(password1) > 20:
         flash("VIRHE: Salasanan tulee olla 4-20 merkkiä pitkä.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
     if len(password2) < 2 or len(password2) > 20:
         flash("VIRHE: Salasanan tulee olla 4-20 merkkiä pitkä.")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
 
     password_hash = generate_password_hash(password1)
 
@@ -245,10 +247,10 @@ def create():
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
         flash("VIRHE: Tunnus on jo varattu")
-        return redirect("/register")
+        return render_template("register.html", filled=filled)
 
     flash("Tunnus luotu. Palaa etusivulle missä voit kirjautua sisään.")
-    return redirect("/register")
+    return render_template("register.html", filled={})
 
 
 @app.route("/login", methods=["POST", "GET"])
