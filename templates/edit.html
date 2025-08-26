@@ -11,7 +11,7 @@
 <form action="/edit/{{ company.id }}" method="post">
   <p>
     <label for="company_name">Yrityksen nimi</label>: <br />
-    <textarea name="company_name" rows="1" cols="20" maxlength="100" >{{ company.name }}</textarea>
+    <textarea name="company_name" rows="1" cols="20" maxlength="50" >{{ company.name }}</textarea>
   </p>
   <p>
     <label for="industry">Yrityksen toimiala</label>: <br />
@@ -25,6 +25,15 @@
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <input type="submit" value="Lähetä" />
 </form>
+
+{% for message in get_flashed_messages() %}
+<p>
+<div class="info">
+  <b style='color:red;'> {{ message }} </b>
+</div>
+</p>
+{% endfor %}
+
 <p>
   <a href="/">Palaa etusivulle</a>
 </p>

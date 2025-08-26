@@ -56,7 +56,7 @@ def new_listing():
     industry = request.form["industry"]
     lister_name = session["username"]
 
-    if len(company_name.strip()) > 100 or stock_amount > 1000000 or stock_amount < 1:
+    if len(company_name.strip()) > 50 or stock_amount > 1000000 or stock_amount < 1:
         flash("Yrityksen nimi liian pitkä tai osakkeiden määrä liian suuri tai alle 1.")
         return redirect("/")
 
@@ -180,18 +180,18 @@ def edit_company(company_id):
         name = request.form["company_name"]
         industry = request.form["industry"]
 
-        if len(name.strip()) > 100:
-            flash("Yrityksen nimen tulee olla alle 100 merkkiä pitkä.")
-            return redirect("/")
+        if len(name.strip()) > 51:
+            flash("Yrityksen nimen tulee olla max 50 merkkiä pitkä.")
+            return render_template("edit.html", company=company[0])
         if not name.strip():
             flash("Yritit poistaa yrityksen nimen. Yrityksellä pitää olla nimi.")
-            return redirect("/")
+            return render_template("edit.html", company=company[0])
         try:
             exchange.update_company(company[0]["id"], name.strip(), industry)
             return redirect("/")
         except sqlite3.IntegrityError:
             flash("Tämän niminen yritys on jo listattu!")
-            return redirect("/")
+            return render_template("edit.html", company=company[0])
     return redirect("/")
 
 @app.route("/remove/<int:company_id>", methods=["GET", "POST"])
