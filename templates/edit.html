@@ -7,34 +7,36 @@
 </head>
 
 <body>
-<h2>Yrityksen tietojen muokkaus</h2>
-<form action="/edit/{{ company.id }}" method="post">
-  <p>
-    <label for="company_name">Yrityksen nimi</label>: <br />
-    <textarea name="company_name" rows="1" cols="20" maxlength="50" >{{ company.name }}</textarea>
-  </p>
-  <p>
-    <label for="industry">Yrityksen toimiala</label>: <br />
-    <select type="text" name="industry">
-    <option value="Kulutustavarat">Kulutustavara</option>
-    <option value="Elintarvikkeet">Elintarvikkeet</option>
-    <option value="Teollisuus">Teollisuus</option>
-    <option value="Elektroniikka">Elektroniikka</option>
-    </select>
-  </p>
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-  <input type="submit" value="Lähetä" />
-</form>
+  <div class="content">
+    <h2>Yrityksen tietojen muokkaus</h2>
+    <form action="/edit/{{ company.id }}" method="post">
+      <p>
+        <label for="company_name">Yrityksen nimi</label>: <br />
+        <textarea name="company_name" rows="1" cols="20" maxlength="50" >{{ company.name }}</textarea>
+      </p>
+      <p>
+        <label for="industry">Yrityksen toimiala</label>: <br />
+        <select type="text" name="industry">
+        <option value="Kulutustavarat">Kulutustavara</option>
+        <option value="Elintarvikkeet">Elintarvikkeet</option>
+        <option value="Teollisuus">Teollisuus</option>
+        <option value="Elektroniikka">Elektroniikka</option>
+        </select>
+      </p>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Lähetä" />
+    </form>
 
-{% for message in get_flashed_messages() %}
-<p>
-<div class="info">
-  <b style='color:red;'> {{ message }} </b>
-</div>
-</p>
-{% endfor %}
+    {% for message in get_flashed_messages() %}
+    <p>
+    <div class="info">
+      <b style='color:red;'> {{ message }} </b>
+    </div>
+    </p>
+    {% endfor %}
 
-<p>
-  <a href="/">Palaa etusivulle</a>
-</p>
+    <p>
+      <a href="/">Palaa etusivulle</a>
+    </p>
+  </div>
 </body>

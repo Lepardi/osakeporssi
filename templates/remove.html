@@ -7,14 +7,16 @@
 </head>
 
 <body>
-  <p>
-    Haluatko varmasti poistaa yrityksen listauksen?
-  </p>
-  <form action="/remove/{{ company.id }}" method="post">
+  <div class="content">
     <p>
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input type="submit" name="continue" value="Jatka" />
-      <input type="submit" name="cancel" value="Peruuta" />
+      Haluatko varmasti poistaa yrityksen listauksen?
     </p>
-  </form>
+    <form action="/remove/{{ company.id }}" method="post">
+      <p>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="submit" name="continue" value="Jatka" />
+        <input type="submit" name="cancel" value="Peruuta" />
+      </p>
+    </form>
+  </div>
 </body>

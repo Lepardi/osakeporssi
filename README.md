@@ -10,8 +10,8 @@ Sovellus imitoi osakepörssiä johon käyttäjät voivat listata yrityksiä raja
   * Käyttäjä näkee sovellukseen listatut yritykset.
   * Käyttäjä pystyy hakemaan yrityksiä hakusanalla.
   * Käyttäjä pystyy tekemään yrityksen osakkeista myynti- ja ostotarjouksia.
+      * HUOM! Kauppojen toteutuminen tilanteessa jossa myynti- ja ostotarjoukset kohtaisivat ei ole toteutettu!
   * Sovelluksessa on sivut joissa näytetään olemassa olevat myynti- ja ostotarjoukset.
-    * HUOM! Kauppojen toteutuminen tilanteessa jossa myynti- ja ostotarjoukset kohtaisivat ei ole toteutettu!
   * Sovelluksessa on käyttäjäsivut, joissa näkee käyttäjän listaamat yritykset.
   * Käyttäjäsivulla näytetään kuinka paljon käyttäjällä on voimassa olevia myynti- tai ostotarjouksia.
 
