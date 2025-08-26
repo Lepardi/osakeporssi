@@ -39,6 +39,37 @@
     <p>
         Toimiala: {{ company.industry }} | Listaaja: {{ company.owner }} | Osakkeita: {{ company.stock_amount }}
     </p>
+
+    {% if session.username %}
+    <p>
+    <form action="/new_buy_order/{{ company.id }}" method="post">
+      <label for="stock_buy_amount">Määrä</label>:
+      <input type="number" name="stock_buy_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
+      <label for="stock_buy_price">Hinta</label>:
+      <input type="number" name="stock_buy_price" size="5" min="1" max="1000000" required/> 
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Osta" />
+    </form> 
+    </p>
+    <p>
+    <form action="/new_sell_order/{{ company.id }}" method="post">
+      <label for="stock_sell_amount">Määrä</label>:
+      <input type="number" name="stock_sell_amount" size="5" min="1" max="1000000" required/> &nbsp &nbsp
+      <label for="stock_sell_price">Hinta</label>:
+      <input type="number" name="stock_sell_price" size="5" min="1" max="1000000" required/> 
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" value="Myy" />
+    </form> 
+    </p>
+    {% endif %}
+    
+    {% if company.owner == session.username %}
+    <p>
+      <a href="/edit/{{ company.id }}">Muokkaa</a> |
+      <a href="/remove/{{ company.id }}">Poista</a>
+    </p>
+    {% endif %}
+
     <hr />
     {% endfor %}
     </ul>
